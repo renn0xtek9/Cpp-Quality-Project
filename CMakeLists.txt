@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.0)
 
 project(testcpp)
 
+
+find_package( OpenCV REQUIRED )
+set(OpenCV_DIR "/usr/include/opencv")
+include_directories(${OpenCV_INCLUDE_DIRS})
+
 add_executable(testcpp main.cpp)
+target_link_libraries(testcpp ${OpenCV_LIBS} )
 
 install(TARGETS testcpp RUNTIME DESTINATION bin)
