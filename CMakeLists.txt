@@ -1,17 +1,18 @@
-cmake_minimum_required(VERSION 3.0)
-enable_testing()
-project(testcpp LANGUAGES CXX)
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.0)
+ENABLE_TESTING ()
+SET (EXENAME testcpp)
+PROJECT (${EXENAME} LANGUAGES CXX)
+SET (CMAKE_CXX_STANDARD 11)
+SET (CMAKE_CXX_EXTENSIONS OFF)
+SET (CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(OpenCV REQUIRED)
-set(OpenCV_DIR "/usr/include/opencv")
-include_directories(${OpenCV_INCLUDE_DIRS})
+ADD_SUBDIRECTORY (test)
 
-add_subdirectory(test)
+ADD_EXECUTABLE (${EXENAME} main.cpp)
 
-add_executable(testcpp main.cpp)
-target_link_libraries(testcpp ${OpenCV_LIBS})
+INSTALL (TARGETS ${EXENAME} RUNTIME DESTINATION bin)
 
-install(TARGETS testcpp RUNTIME DESTINATION bin)
+ADD_CUSTOM_TARGET (
+        disassemble
+        COMMAND /usr/bin/objdump -S $<TARGET_FILE:testcpp> > ${CMAKE_BINARY_DIR}/${EXENAME}.dump
+        DEPENDS ${EXENAME})
