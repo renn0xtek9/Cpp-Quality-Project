@@ -16,3 +16,5 @@ ADD_CUSTOM_TARGET (
         disassemble
         COMMAND /usr/bin/objdump -S $<TARGET_FILE:testcpp> > ${CMAKE_BINARY_DIR}/${EXENAME}.dump
         DEPENDS ${EXENAME})
+
+ADD_CUSTOM_TARGET (convert_to_assembly COMMAND g++ -S ${CMAKE_SOURCE_DIR}/main.cpp)
