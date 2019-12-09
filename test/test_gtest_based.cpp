@@ -9,28 +9,28 @@ void this_function_has_no_except() noexcept
     function_that_throw();
 }
 
-TEST(DummyTest, WhatHappenIfThrownFromANoExcept)
+TEST(WhatHappenIfThrownFromANoExcept, DummyTest)
 {
     this_function_has_no_except();
     EXPECT_EQ(true,true);
 }
 
-TEST(DummyTest, WhatHappenIfFail)
+TEST(WhatHappenIfFail, DummyTest)
 {
     FAIL();
     EXPECT_EQ(true,true);
 };
-TEST(DummyTest ,WhatHappenIfThrown)
+TEST(WhatHappenIfThrown, DummyTest)
 {
     function_that_throw();
     EXPECT_EQ(true,true);
 }
-TEST(DummyTest, WhatHappenIfExit1)
+TEST(WhatHappenIfExit1, DummyTest)
 {
     exit(1);
     EXPECT_EQ(true,true);
 }
-TEST(DummyTest, ThisTestSucceed)
+TEST(ThisTestSucceed, DummyTest)
 {
     EXPECT_EQ(true,true);
 }
