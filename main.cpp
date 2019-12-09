@@ -1,4 +1,6 @@
 #include <iostream>
+#include <probe.h>
+
 void ShortTime()
 {
     std::cout<<"Short"<<std::endl;
@@ -34,6 +36,7 @@ void SuperLongTime()
 }
 int main ( int argc, char **argv )
 {
+    ShowHelloWorld();
     ShortTime();
     SuperLongTime();
     AllocateLikeMad();
