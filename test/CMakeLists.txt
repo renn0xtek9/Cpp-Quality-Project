@@ -1,7 +1,7 @@
 ADD_EXECUTABLE (testexe test_main.cpp)
 ADD_TEST (NAME test_one COMMAND $<TARGET_FILE:testexe> o)
 ADD_TEST (NAME test_failing COMMAND $<TARGET_FILE:testexe> n)
-ADD_TEST (NAME test_onceageina COMMAND $<TARGET_FILE:testexe> o)
+ADD_TEST (NAME test_onceagain COMMAND $<TARGET_FILE:testexe> o)
 
 FIND_PACKAGE (GTest REQUIRED)
 
