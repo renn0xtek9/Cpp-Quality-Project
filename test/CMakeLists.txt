@@ -9,6 +9,10 @@ ADD_EXECUTABLE (test_gtest_based test_gtest_based.cpp)
 TARGET_LINK_LIBRARIES (test_gtest_based ${GTEST_BOTH_LIBRARIES})
 ADD_TEST (NAME test_with_gtest COMMAND $<TARGET_FILE:testexe>)
 
+
+ADD_TEST (NAME testrunnerscript WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} COMMAND /bin/bash ${CMAKE_CURRENT_SOURCE_DIR}/test_script.sh)
+
+
 # This is a workaround of a CMake bug which does not write build target for the "test" target thus cd build && rm -rf * && cmake .. && make test  will not work
 ADD_CUSTOM_TARGET (
         specs
