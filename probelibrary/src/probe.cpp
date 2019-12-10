@@ -1,6 +1,10 @@
 #include "probe.h"
-
-void ShowHelloWorld ()
+#include <vector>
+void Probe ()
 {
-    std::cout<<"HelloWorld"<<std::endl;
+    std::vector<int> vec;
+    for(int i=0;i<100000;i++)
+    {
+        vec.emplace_back(0);
+    }
 }

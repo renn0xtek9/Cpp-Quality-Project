@@ -36,7 +36,7 @@ void SuperLongTime()
 }
 int main ( int argc, char **argv )
 {
-    ShowHelloWorld();
+    Probe();
     ShortTime();
     SuperLongTime();
     AllocateLikeMad();
