@@ -3,6 +3,7 @@
 #include <memory>
 
 
+
 class DummyPayload{
 public:
     static int instantiation_counter;
@@ -16,25 +17,46 @@ public:
 };
 int DummyPayload::instantiation_counter=0;
 
+class Lifecycle{
+public :
+    virtual void on_Activate(){
+        std::cout<<"Lifecycle activate";
+    }
+    
+    virtual void on_Deactivate(){
+        std::cout<<"Lifecycle deactivate";
+    }
+};
+
+
 template<class T> 
-class BaseClass
+class BaseClass : public Lifecycle
 {
 public:
     BaseClass() =default ;
+    void on_Deactivate() final;
+    /*
     void on_Deactivate() {
         m_object.reset();
-    }
+    }*/
     std::unique_ptr<T> m_object{};
     virtual void Instantiate() =0 ;
     
-    virtual void on_Activate(){
+    virtual void on_Activate() final{
         Instantiate();
     }
     
 private:
-    
-    
+        
 };
+
+//in .cpp
+template<typename T>
+void BaseClass<T>::on_Deactivate(){
+    m_object.reset();
+}
+
+
 
 class DerivedClass: public BaseClass<DummyPayload>
 {
@@ -42,10 +64,17 @@ public:
     DerivedClass(): BaseClass(){
         Instantiate();
     }
+    /*
     void Instantiate() override{
-        std::cout<<"Insantiate";
+        std::cout<<"Insantiate override";
+        m_object=std::make_unique<DummyPayload>(DummyPayload{2,3.0});
+    }*/
+    
+    void Instantiate() {
+        std::cout<<"Insantiate not override";
         m_object=std::make_unique<DummyPayload>(DummyPayload{2,3.0});
     }
+    
 };
 
 
@@ -55,6 +84,7 @@ public:
 int main ( int argc, char **argv )
 {
     Probe();
+    
     
     DerivedClass myobjec;
     myobjec.on_Deactivate();
