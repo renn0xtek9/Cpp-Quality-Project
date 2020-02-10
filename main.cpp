@@ -1,117 +1,95 @@
 #include <iostream>
 #include <probe.h>
 #include <memory>
+// https://codeyarns.com/2016/11/21/override-and-final-in-c/
 
 
-
-class DummyPayload{
+class VirtualClass
+{
 public:
-    static int instantiation_counter;
-    DummyPayload(int vara, double varb){
-        DummyPayload::instantiation_counter+=1;
-        var_a=vara;
-        var_b=varb;
+    virtual void foo() =0;
+    virtual void bar() {
+        std::cout<<__PRETTY_FUNCTION__<<" "<< __LINE__<<" "<<__FILE__<<std::endl;
     }
-    int var_a{};
-    double var_b{};
+    virtual void override_me() const {
+        std::cout<<__PRETTY_FUNCTION__<<" "<< __LINE__<<" "<<__FILE__<<std::endl;
+        std::cout<<"\t\tyou did not override me ?"<<std::endl;
+    }
 };
-int DummyPayload::instantiation_counter=0;
 
-class Lifecycle{
+class A:public VirtualClass
+{
 public :
-    virtual void on_Activate(){
-        std::cout<<"Lifecycle activate";
-    }
-    
-    virtual void on_Deactivate(){
-        std::cout<<"Lifecycle deactivate";
-    }
-};
-
-
-template<class T> 
-class BaseClass : public Lifecycle
-{
-public:
-    BaseClass() =default ;
-    void on_Deactivate() final;
-    /*
-    void on_Deactivate() {
-        m_object.reset();
-    }*/
-    std::unique_ptr<T> m_object{};
-    virtual void Instantiate() =0 ;
-    
-    virtual void on_Activate() final{
-        Instantiate();
-    }
-    
-private:
-        
-};
-
-//in .cpp
-template<typename T>
-void BaseClass<T>::on_Deactivate(){
-    m_object.reset();
-}
-
-
-
-class DerivedClass: public BaseClass<DummyPayload>
-{
-public:
-    DerivedClass(): BaseClass(){
-        Instantiate();
+    void foo(){
+        std::cout<<__PRETTY_FUNCTION__<<" "<< __LINE__<<" "<<__FILE__<<std::endl;
     }
     /*
-    void Instantiate() override{
-        std::cout<<"Insantiate override";
-        m_object=std::make_unique<DummyPayload>(DummyPayload{2,3.0});
-    }*/
+    void override_me() override{
+        std::cout<<"This wouldn't compile thanks to override anyway";
+    }
+    */
+};
+
+class B:public VirtualClass
+{
+public:
+    void foo(){
+        std::cout<<__PRETTY_FUNCTION__<<" "<< __LINE__<<" "<<__FILE__<<std::endl;
+    }
+    void bar() override
+    {
+        std::cout<<__PRETTY_FUNCTION__<<" "<< __LINE__<<" "<<__FILE__<<std::endl;
+    }
+    void override_me() const final{
+        std::cout<<__PRETTY_FUNCTION__<<" "<< __LINE__<<" "<<__FILE__<<std::endl;
+        std::cout<<"This is a final override" <<std::endl;
+    }
+    /*
+    void override_me() final{
+        std::cout<<"This would't compile because final but not virtual (not virtual because it does not find the paren)"<<std::endl;
+    }
+    */
+    virtual void override_me_too() const final{
+        std::cout<<__PRETTY_FUNCTION__<<" "<< __LINE__<<" "<<__FILE__<<std::endl;
+        std::cout<<"This is valid (thanks to virutal) and final BUT you are not overriding anyhthing (because missing of override) !!!"<<std::endl;
+//         PureVirtualCalss::override_me_too();  //this would not work of course
+    }
+};
+class C:public B {
+public:
+    /*
+    void override_me() const override
+    {
+        std::cout<<"This should not compile (overriding a final)"<<std::endl;
+    }
+    */
     
-    void Instantiate() {
-        std::cout<<"Insantiate not override";
-        m_object=std::make_unique<DummyPayload>(DummyPayload{2,3.0});
+    /*
+    void override_me_too() const override
+    {
+        std::cout<<"This should compile because of the final"<<std::endl;
+    }
+    */
+    
+    void bar() override
+    {
+        std::cout<<__PRETTY_FUNCTION__<<" "<< __LINE__<<" "<<__FILE__<<" overriding bar" <<std::endl;
     }
     
 };
-
-
-
-
 
 int main ( int argc, char **argv )
 {
-    Probe();
+//     Probe();
+    A objA;
+    objA.override_me();
     
+    B objB;
+    objB.override_me();
+    objB.override_me_too();
     
-    DerivedClass myobjec;
-    myobjec.on_Deactivate();
-    if(myobjec.m_object)
-    {
-        std::cout<<"Objec exist !!!"<<std::endl;
-        std::cout<<myobjec.m_object->var_a<<std::endl;
-    }
-    else
-    {
-        std::cout<<"Object Does not exist"<<std::endl;
-    }
-    
-    myobjec.on_Activate();
-    myobjec.on_Deactivate();
-    myobjec.on_Activate();
-     if(myobjec.m_object)
-    {
-        std::cout<<"Objec exist !!!"<<std::endl;
-        std::cout<<DummyPayload::instantiation_counter<<std::endl;
-    }
-    else
-    {
-        std::cout<<"Object Does not exist"<<std::endl;
-    }    
-
-    
+    C objC;
+    objC.bar();
     
     return 0;
 }
