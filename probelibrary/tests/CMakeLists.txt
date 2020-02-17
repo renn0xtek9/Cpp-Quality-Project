@@ -6,6 +6,4 @@ TARGET_LINK_LIBRARIES (probe_unittest probe ${GTEST_BOTH_LIBRARIES})
 ADD_TEST (NAME probe_unit COMMAND probe_unittest)
 SET(PROBE_BENCHMARKDIR ${CMAKE_CURRENT_BINARY_DIR})
 
-ADD_EXECUTABLE (probe_benchmark probe_benchmark.cpp)
-TARGET_LINK_LIBRARIES (probe_benchmark probe)
 
