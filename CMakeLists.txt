@@ -21,3 +21,4 @@ ADD_CUSTOM_TARGET (
         DEPENDS ${EXENAME})
 
 ADD_CUSTOM_TARGET (convert_to_assembly COMMAND g++ -S ${CMAKE_SOURCE_DIR}/main.cpp)
+ADD_CUSTOM_TARGET (benchmark COMMAND $<TARGET_FILE:probe_benchmark> > ${CMAKE_SOURCE_DIR}/benchmark_report.txt)
