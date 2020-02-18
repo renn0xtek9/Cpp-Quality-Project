@@ -386,10 +386,14 @@ CheckOptions:
     value:           ''
   - key:             readability-identifier-naming.MacroDefinitionCase
     value:           UPPER_CASE
+  - key:             readability-identifier-naming.MacroDefinitionSuffix
+    value:           ''
 # Constants:
 # Rules on LocalConstant and ConstexprVariable case is not enforced, as it is not mandatory
   - key:             readability-identifier-naming.ConstexprVariableCase
-    value:           aNy_CasE
+    value:           CamelCase
+  - key:             readability-identifier-naming.ConstexprVariablePrefix
+    value:           'k'
   - key:             readability-identifier-naming.LocalConstantCase
     value:           aNy_CasE
   - key:             readability-identifier-naming.StaticConstantCase
@@ -406,22 +410,30 @@ CheckOptions:
   - key:             readability-identifier-naming.ClassConstantSuffix
     value:           ''
   - key:             readability-identifier-naming.EnumConstantCase
-    value:           CamelCase
+    value:           UPPER_CASE
   - key:             readability-identifier-naming.EnumConstantPrefix
-    value:           'k'
+    value:           ''
+  - key:             readability-identifier-naming.GlobalPointerCase
+    value:           lower_case
+  - key:             readability-identifier-naming.GlobalPointerPrefix
+    value:           'g_'
+  - key:             readability-identifier-naming.GlobalVariableCase
+    value:           lower_case
+  - key:             readability-identifier-naming.GlobalVariablePrefix
+    value:           'g_'
 # These rules are used on classes
   - key:             readability-identifier-naming.PublicMemberCase
     value:           lower_case
-  - key:             readability-identifier-naming.PublicMemberSuffix
+  - key:             readability-identifier-naming.PublicMemberPrefix
     value:           ''
   - key:             readability-identifier-naming.PrivateMemberCase
     value:           lower_case
-  - key:             readability-identifier-naming.PrivateMemberSuffix
-    value:           ''
+  - key:             readability-identifier-naming.PrivateMemberPrefix
+    value:           'm_'
   - key:             readability-identifier-naming.ProtectedMemberCase
     value:           lower_case
-  - key:             readability-identifier-naming.ProtectedMemberSuffix
-    value:           ''
+  - key:             readability-identifier-naming.ProtectedMemberPrefix
+    value:           'm_'
   - key:             readability-implicit-bool-conversion.AllowIntegerConditions
     value:           '0'
   - key:             readability-implicit-bool-conversion.AllowPointerConditions
