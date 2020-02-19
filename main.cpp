@@ -76,7 +76,7 @@ class C : public B {
 };
 
 int main(int argc, char** argv) {
-  //     Probe();
+  Probe();
   A objA;
   objA.override_me();
 
