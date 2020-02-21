@@ -23,5 +23,7 @@ FOREACH (FILE ${CHECK_CXX_SOURCE_FILES})
     VERBATIM)
   LIST (APPEND FORMAT_DEPENDENCIES ${STAMPFILE}.stamp)
 ENDFOREACH (FILE)
-
+# BUG if a file get renamed, its dependencies remains and will create make[2]:
+# *** No rule to make target '../probelibrary/include/wtf.h', needed by
+# 'probelibrary/include/wtf.h.stamp'.  Stop.
 ADD_CUSTOM_TARGET (format ALL DEPENDS ${FORMAT_DEPENDENCIES})
