@@ -26,4 +26,13 @@ ENDFOREACH (FILE)
 # BUG if a file get renamed, its dependencies remains and will create make[2]:
 # *** No rule to make target '../probelibrary/include/wtf.h', needed by
 # 'probelibrary/include/wtf.h.stamp'.  Stop.
-ADD_CUSTOM_TARGET (format ALL DEPENDS ${FORMAT_DEPENDENCIES})
+ADD_CUSTOM_TARGET (format ALL DEPENDS ${FORMAT_DEPENDENCIES}
+                                      ${BUILDDIRECTORY}/formatrules.txt)
+
+ADD_CUSTOM_COMMAND (
+  OUTPUT ${BUILDDIRECTORY}/formatrules.txt
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  COMMAND echo "generate rules----------"
+  COMMAND
+    python3 ${CMAKE_SOURCE_DIR}/cmake_modules/scripts/generate_format_rules.py
+    "${BUILDDIRECTORY}" >${BUILDDIRECTORY}/formatrules.txt)
