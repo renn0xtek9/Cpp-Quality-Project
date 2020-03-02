@@ -18,11 +18,13 @@ class FormatRuleCreator:
     def GetListOfAbsolutePathOfRelevantFiles(self):
         relevant_source_files=list()
         relevant_file_extensions=".cpp;.h;.hpp"
+        os.chdir(self.repository)
         files=glob.glob("**",recursive=True)
         for filepath in files:
             for extension in relevant_file_extensions.split(';'):
                 if filepath.split('.')[-1]==extension.replace('.','') and not str(self.builddirectory+os.sep) in filepath :
-                    relevant_source_files.append(filepath)
+                    relevant_source_files.append(os.sep.join([self.repository,filepath]))
+        print(relevant_source_files)
         return relevant_source_files        
     
     def GetFirstLineOfStampRecipe(self,sourcefile):
