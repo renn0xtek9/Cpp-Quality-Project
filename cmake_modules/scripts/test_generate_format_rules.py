@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from generate_format_rules import FormatRuleCreator
 import unittest
+import os
 
 builddirectory=None
 relevant_file_extensions=None
@@ -40,6 +41,16 @@ class Testclassname(unittest.TestCase):
         
     def test_GetCMakeFilesFormatContent_in_subfolder(self):
         self.assertEqual(["CMakeFiles/format: foo/bar.cpp.stamp"],self.m_format_rule_creator.GetCMakeFilesFormatContent(["foo/bar.cpp"]))
+        
+    def test_GetListOfAbsolutePathOfRelevantFiles(self):
+        current_file_directory=os.path.dirname(os.path.abspath(__file__))
+        test_repository=os.sep.join([current_file_directory,"generate_format_rules_test","resources","repository1"])
+        test_builddirectory=os.sep.join([test_repository,"build"])
+        self.m_format_rule_creator=FormatRuleCreator(test_builddirectory,test_repository)
+        self.assertEqual([os.sep.join([test_repository,"foo.cpp"]),
+                          os.sep.join([test_repository,"bar.cpp"]),
+                          os.sep.join([test_repository,"src","foobar.cpp"])],self.m_format_rule_creator.GetListOfAbsolutePathOfRelevantFiles())
+    
         
         
 if __name__ == '__main__':
