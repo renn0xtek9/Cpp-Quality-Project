@@ -20,10 +20,18 @@ class FormatRuleCreator:
     
     def GetSecondLineOfStampRecipe(self,sourcefile,sourcefilenumber):
         return str("	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/max/Projects/testcpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_{}) \"Formatting /home/max/Projects/testcpp/main.cpp and stamping it with /home/max/Projects/testcpp/build/main.cpp.stamp\"".format(sourcefilenumber))
+    
+    def GetCMakeFilesFormatContent(self,sourcefiles=list()):
+        """This is the first block of the dynamically-written part of the build.make rule
+        it produces ouptut like 
+        CMakeFiles/format: foobar.cpp.stamp
+        """
+        content=list()
+        for sourcefile in sourcefiles:
+            content.append("CMakeFiles/format: "+sourcefile+".stamp")
+        return content
+        
 
-
-##def GetRepositoryPath():
-    #def 
 
 def DumpArrayOfLinesIntoOutputFile(content,outputfile,replacementdict=None,append_or_write="w"):
     with codecs.open(outputfile, append_or_write , encoding ='utf_8' ) as file:		#use a instead of w to append a+ to append/create w+ for write/create        

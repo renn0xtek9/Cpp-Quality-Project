@@ -35,6 +35,12 @@ class Testclassname(unittest.TestCase):
     def test_GetSecondLineOfStampRecipe(self):
         self.assertEqual("\t@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/max/Projects/testcpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) \"Formatting /home/max/Projects/testcpp/main.cpp and stamping it with /home/max/Projects/testcpp/build/main.cpp.stamp\"",self.m_format_rule_creator.GetSecondLineOfStampRecipe("main.cpp",12))
         
+    def test_GetCMakeFilesFormatContent(self):
+        self.assertEqual(["CMakeFiles/format: foobar.cpp.stamp"],self.m_format_rule_creator.GetCMakeFilesFormatContent(["foobar.cpp"]))
+        
+    def test_GetCMakeFilesFormatContent_in_subfolder(self):
+        self.assertEqual(["CMakeFiles/format: foo/bar.cpp.stamp"],self.m_format_rule_creator.GetCMakeFilesFormatContent(["foo/bar.cpp"]))
+        
         
 if __name__ == '__main__':
     unittest.main()
