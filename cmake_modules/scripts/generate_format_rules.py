@@ -33,6 +33,14 @@ class FormatRuleCreator:
     def GetSecondLineOfStampRecipe(self,sourcefile,sourcefilenumber):
         return str("	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/max/Projects/testcpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_{}) \"Formatting /home/max/Projects/testcpp/main.cpp and stamping it with /home/max/Projects/testcpp/build/main.cpp.stamp\"".format(sourcefilenumber))
     
+    def GetThirdLineOfStampRecipe(self,sourcefile):
+        """When call with /home/max/Projects/testcpp/foo/src/main.cpp, this will return something like 
+        /usr/bin/cmake -E make_directory build/foo/src
+        """            
+        path_inside_repository=os.path.commonpath([self.repository,os.path.abspath(sourcefile)])
+        path_inside_builddirectory=os.path.abspath(sourcefile).replace(path_inside_repository,self.builddirectory)
+        return str("/usr/bin/cmake -E make_directory "+os.path.abspath(os.path.join(path_inside_builddirectory,os.pardir)))
+    
     def GetCMakeFilesFormatContent(self,sourcefiles=list()):
         """This is the first block of the dynamically-written part of the build.make rule
         it produces ouptut like 
@@ -45,11 +53,14 @@ class FormatRuleCreator:
     
     def WriteMakeFileOfFormattingRule(self):
         """This is the main function that will actually write the build.make for the formatting rule"""
-        rule_make_file_list=[builddirectory,"CMakeFiles","format.dir","build.make"]
+        rule_make_file_list=[self.builddirectory,"CMakeFiles","format.dir","build.make"]
+        rule_make_file=os.sep.join(rule_make_file_list)
         code_generation_directory=os.sep.join(["cmake_modules","scripts"])
-        self.DumpFileIntoOutputFile(os.sep.join([code_generation_directory,"format_rules_header.in"]),os.sep.join(rule_make_file_list),None,'w')
-
-        self.DumpFileIntoOutputFile(os.sep.join([code_generation_directory,"format_rules_footer.in"]),os.sep.join(rule_make_file_list),None,'a')
+        self.DumpFileIntoOutputFile(os.sep.join([code_generation_directory,"format_rules_header.in"]),rule_make_file,None,'w')
+        self.DumpArrayOfLinesIntoOutputFile(self.GetCMakeFilesFormatContent(self.GetListOfAbsolutePathOfRelevantFiles()),rule_make_file,None,'a')  
+        ##TODO dump the blcok
+        ##TODO dump the third dynamic content part 
+        self.DumpFileIntoOutputFile(os.sep.join([code_generation_directory,"format_rules_footer.in"]),rule_make_file,None,'a')
         
         
     def DumpArrayOfLinesIntoOutputFile(self,content,outputfile,replacementdict=None,append_or_write="w"):
@@ -59,6 +70,7 @@ class FormatRuleCreator:
     def DumpFileIntoOutputFile(self,inputfile,outputfile,replacementdict=None,append_or_write="w"):
         content = [line.rstrip('\n') for line in open(inputfile)]
         self.DumpArrayOfLinesIntoOutputFile(content,outputfile,None,append_or_write)
+        
 
 def AsbolutePathToSourceFile(absolute_build_path,sourcefile,repository):
     """TODO delete me"""
@@ -75,12 +87,6 @@ def GetCommandContentForStamp(sourcefile):
     return content
     
     
-def GetCMakeFilesFormatContent(sourcefiles=list()):
-    """TODO delete me """
-    content=list()
-    for sourcefile in sourcefiles:
-        content.append("CMakeFiles/format: "+sourcefile+".stamp")
-    return content
 
 
 def main(argv):
@@ -101,8 +107,6 @@ def main(argv):
     
     
     DumpArrayOfLinesIntoOutputFile(GetCMakeFilesFormatContent(relevant_source_files),os.sep.join(rule_make_file_list),None,'a')
-    
-        
     
     
 #if __name__ == "__main__":
