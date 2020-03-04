@@ -5,9 +5,11 @@ import sys,os,glob,re,codecs
 
 class FormatRuleCreator:
     def __init__(self,builddirectory,repository,cpp_format_tool=None,python_format_tool=None,qml_format_tool=None):
-        self.builddirectory=builddirectory
-        self.repository=repository
+        self.repository=repository            
         self.cpp_format_tool=cpp_format_tool
+        self.builddirectory=builddirectory
+        if not os.path.isabs(builddirectory):
+            self.builddirectory=os.path.normpath(os.sep.join([self.repository,builddirectory]))      
 
     def AsbolutePathToSourceFile(self,absolute_build_path,sourcefile,repository):
         if os.path.isabs(sourcefile):
@@ -34,12 +36,21 @@ class FormatRuleCreator:
     def GetSecondLineOfStampRecipe(self,sourcefile,sourcefilenumber):
         return str("	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/max/Projects/testcpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_{}) \"Formatting /home/max/Projects/testcpp/main.cpp and stamping it with /home/max/Projects/testcpp/build/main.cpp.stamp\"".format(sourcefilenumber))
     
+    def __GetFullPathToSurfaceInsideTheBuildDirectory(self,sourcefile):
+        path_inside_repository=os.path.commonpath([self.repository,os.path.abspath(sourcefile)])
+        path_inside_builddirectory=os.path.abspath(sourcefile).replace(path_inside_repository,self.builddirectory)
+        return path_inside_builddirectory
+    
+    def __GetStampFileAbsolutePath(self,sourcefile):
+        return str("{}.stamp".format(self.__GetFullPathToSurfaceInsideTheBuildDirectory(sourcefile)))
+    
     def GetThirdLineOfStampRecipe(self,sourcefile):
         """When call with /home/max/Projects/testcpp/foo/src/main.cpp, this will return something like 
         /usr/bin/cmake -E make_directory build/foo/src
         """            
-        path_inside_repository=os.path.commonpath([self.repository,os.path.abspath(sourcefile)])
-        path_inside_builddirectory=os.path.abspath(sourcefile).replace(path_inside_repository,self.builddirectory)
+        #path_inside_repository=os.path.commonpath([self.repository,os.path.abspath(sourcefile)])
+        #path_inside_builddirectory=os.path.abspath(sourcefile).replace(path_inside_repository,self.builddirectory)
+        path_inside_builddirectory=self.__GetFullPathToSurfaceInsideTheBuildDirectory(sourcefile)
         return str("\t/usr/bin/cmake -E make_directory "+os.path.abspath(os.path.join(path_inside_builddirectory,os.pardir)))
     
     def GetFourthLineOfStampeRecipe(self,sourcefile):
@@ -47,6 +58,8 @@ class FormatRuleCreator:
         /usr/bin/clang-format -i /home/max/Projects/testcpp/foo/src/main.cpp"""
         return str("\t{} {}".format(self.cpp_format_tool,sourcefile))
         
+    def GetFifthLineOfStampRecipe(self,sourcefile):
+        return str("\t/usr/bin/cmake -E touch {}".format(os.path.abspath(self.__GetStampFileAbsolutePath(sourcefile))))
     
     def GetCMakeFilesFormatContent(self,sourcefiles=list()):
         """This is the first block of the dynamically-written part of the build.make rule

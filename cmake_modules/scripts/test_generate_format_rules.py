@@ -63,15 +63,20 @@ class Testclassname(unittest.TestCase):
                           os.sep.join([test_repository, "bar.cpp"])], self.m_format_rule_creator.GetListOfAbsolutePathOfRelevantFiles())
 
     def test_GetThirdLineOfStampRecipe(self):
-        expected_directory=os.sep.join([self.current_file_directory,"generate_format_rules_tests", "resources", "repository1","build","lib","src"])
+        expected_directory="/home/foo/bar/build/lib/src"
         self.assertEqual("\t/usr/bin/cmake -E make_directory "+expected_directory,
                          self.m_format_rule_creator.GetThirdLineOfStampRecipe("/home/foo/bar/lib/src/main.cpp"))
         
     def test_GetFourthLineOfStampRecipe_cpp_file(self):
-        cpp_format_tools="/usr/bin/clang -i"
         sourcefile="/home/foo/bar/lib/src/main.cpp"
         expected_line="\t/usr/bin/clang-format -i /home/foo/bar/lib/src/main.cpp"
         self.assertEqual(expected_line,self.m_format_rule_creator.GetFourthLineOfStampeRecipe(sourcefile))
+        
+    def test_GetFifthLineOfStampRecipe(self):
+        sourcefile="/home/foo/bar/lib/src/main.cpp"
+        expected_line="\t/usr/bin/cmake -E touch /home/foo/bar/build/lib/src/main.cpp.stamp"
+        self.assertEqual(expected_line,self.m_format_rule_creator.GetFifthLineOfStampRecipe(sourcefile))
+        
 
 
 
