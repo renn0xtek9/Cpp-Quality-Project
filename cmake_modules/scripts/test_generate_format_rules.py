@@ -9,7 +9,7 @@ relevant_file_extensions = None
 
 class Testclassname(unittest.TestCase):
     def setUp(self):
-        self.m_format_rule_creator = FormatRuleCreator("build", "/home/foo/bar/")
+        self.m_format_rule_creator = FormatRuleCreator("build", "/home/foo/bar/",cpp_format_tool="/usr/bin/clang-format -i")
         self.current_file_directory = os.path.dirname(os.path.abspath(__file__))
         pass
 
@@ -64,8 +64,15 @@ class Testclassname(unittest.TestCase):
 
     def test_GetThirdLineOfStampRecipe(self):
         expected_directory=os.sep.join([self.current_file_directory,"generate_format_rules_tests", "resources", "repository1","build","lib","src"])
-        self.assertEqual("/usr/bin/cmake -E make_directory "+expected_directory,
+        self.assertEqual("\t/usr/bin/cmake -E make_directory "+expected_directory,
                          self.m_format_rule_creator.GetThirdLineOfStampRecipe("/home/foo/bar/lib/src/main.cpp"))
+        
+    def test_GetFourthLineOfStampRecipe_cpp_file(self):
+        cpp_format_tools="/usr/bin/clang -i"
+        sourcefile="/home/foo/bar/lib/src/main.cpp"
+        expected_line="\t/usr/bin/clang-format -i /home/foo/bar/lib/src/main.cpp"
+        self.assertEqual(expected_line,self.m_format_rule_creator.GetFourthLineOfStampeRecipe(sourcefile))
+
 
 
 if __name__ == '__main__':

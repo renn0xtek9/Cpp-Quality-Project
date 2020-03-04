@@ -4,9 +4,10 @@ import sys,os,glob,re,codecs
 
 
 class FormatRuleCreator:
-    def __init__(self,builddirectory,repository):
+    def __init__(self,builddirectory,repository,cpp_format_tool=None,python_format_tool=None,qml_format_tool=None):
         self.builddirectory=builddirectory
         self.repository=repository
+        self.cpp_format_tool=cpp_format_tool
 
     def AsbolutePathToSourceFile(self,absolute_build_path,sourcefile,repository):
         if os.path.isabs(sourcefile):
@@ -39,7 +40,13 @@ class FormatRuleCreator:
         """            
         path_inside_repository=os.path.commonpath([self.repository,os.path.abspath(sourcefile)])
         path_inside_builddirectory=os.path.abspath(sourcefile).replace(path_inside_repository,self.builddirectory)
-        return str("/usr/bin/cmake -E make_directory "+os.path.abspath(os.path.join(path_inside_builddirectory,os.pardir)))
+        return str("\t/usr/bin/cmake -E make_directory "+os.path.abspath(os.path.join(path_inside_builddirectory,os.pardir)))
+    
+    def GetFourthLineOfStampeRecipe(self,sourcefile):
+        """When call with  /home/max/Projects/testcpp/foo/src/main.cpp, this will return 
+        /usr/bin/clang-format -i /home/max/Projects/testcpp/foo/src/main.cpp"""
+        return str("\t{} {}".format(self.cpp_format_tool,sourcefile))
+        
     
     def GetCMakeFilesFormatContent(self,sourcefiles=list()):
         """This is the first block of the dynamically-written part of the build.make rule
