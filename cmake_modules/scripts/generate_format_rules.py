@@ -50,7 +50,11 @@ class FormatRuleCreator:
     def _GetFourthLineOfStampeRecipe(self, sourcefile):
         """When call with  /home/max/Projects/testcpp/foo/src/main.cpp, this will return 
         /usr/bin/clang-format -i /home/max/Projects/testcpp/foo/src/main.cpp"""
-        return str("\t{} {}".format(self.cpp_format_tool, sourcefile))
+        extansion=sourcefile.split('.')[-1]
+        if extansion in ["h","hpp","cpp","cxx","hxx"]:
+            return str("\t{} {}".format(self.cpp_format_tool, sourcefile))
+        if extansion in ["py"]:
+            return str("\t{} {}".format(self.python_format_tool, sourcefile))
 
     def _GetFifthLineOfStampRecipe(self, sourcefile):
         return str("\t/usr/bin/cmake -E touch {}".format(os.path.abspath(self._GetStampFileAbsolutePath(sourcefile))))

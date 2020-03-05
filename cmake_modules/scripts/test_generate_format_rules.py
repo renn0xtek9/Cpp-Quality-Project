@@ -14,7 +14,6 @@ class Testclassname(unittest.TestCase):
         self.current_file_directory = os.path.dirname(os.path.abspath(__file__))
         pass
 
-
     def test_GetFirstLineOfStampRecipe(self):
         self.assertEqual("main.cpp.stamp: ../main.cpp",
                          self.m_format_rule_creator._GetFirstLineOfStampRecipe("/home/foo/bar/main.cpp"))
@@ -36,7 +35,13 @@ class Testclassname(unittest.TestCase):
         sourcefile="/home/foo/bar/lib/src/main.cpp"
         expected_line="\t/usr/bin/clang-format -i /home/foo/bar/lib/src/main.cpp"
         self.assertEqual(expected_line,self.m_format_rule_creator._GetFourthLineOfStampeRecipe(sourcefile))
-        
+    
+    def test_GetFourthLineOfStampRecipe_python_file(self):
+        sourcefile="/home/foo/bar/lib/src/script.py"
+        self.m_format_rule_creator.python_format_tool="/usr/bin/autopep8 -i"
+        expected_line="\t/usr/bin/autopep8 -i /home/foo/bar/lib/src/script.py"
+        self.assertEqual(expected_line,self.m_format_rule_creator._GetFourthLineOfStampeRecipe(sourcefile))
+    
     def test_GetFifthLineOfStampRecipe(self):
         sourcefile="/home/foo/bar/lib/src/main.cpp"
         expected_line="\t/usr/bin/cmake -E touch /home/foo/bar/build/lib/src/main.cpp.stamp"
