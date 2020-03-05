@@ -130,7 +130,7 @@ class FormatRuleCreator:
         self._DumpArrayOfLinesIntoOutputFile(self._GetCMakeFilesFormatContent(
             self._GetListOfAbsolutePathOfRelevantFiles()), rule_make_file, None, 'a')
         self._DumpArrayOfLinesIntoOutputFile(self._GetStampRecipeSection())
-        # TODO dump the third dynamic content part
+        self._DumpArrayOfLinesIntoOutputFile(self._GetFormatStampBlock(self._GetListOfAbsolutePathOfRelevantFiles()))
         self._DumpFileIntoOutputFile(os.sep.join(
             [code_generation_directory, "format_rules_footer.in"]), rule_make_file, None, 'a')
 
