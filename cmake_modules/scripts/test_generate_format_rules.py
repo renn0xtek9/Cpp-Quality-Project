@@ -94,6 +94,13 @@ class Testclassname(unittest.TestCase):
         expected_content="format: lib/src/file.cpp.stamp"
         self.assertEqual(expected_content,self.m_unit._GetFormatStampLine(sourcefile))
         
+    def test_GetFormatStampBlock(self):
+        sourcefiles=["/home/foo/bar/lib/src/file.cpp","/home/foo/bar/main.cpp"]
+        expected=["format: CMakeFiles/format",
+        "format: lib/src/file.cpp.stamp",
+        "format: main.cpp.stamp",
+        "format: CMakeFiles/format.dir/build.make"]
+        self.assertEqual(expected,self.m_unit._GetFormatStampBlock(sourcefiles))
 
 
 

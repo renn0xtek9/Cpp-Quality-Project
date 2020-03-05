@@ -104,6 +104,13 @@ class FormatRuleCreator:
         stampfile=self._GetStampFileAbsolutePath(sourcefile)
         stampfile_relative=os.path.relpath(stampfile,self.builddirectory)
         return str("format: {}".format(stampfile_relative))
+    
+    def _GetFormatStampBlock(self,sourcefiles):
+        content=["format: CMakeFiles/format"]
+        for source in sourcefiles:
+            content.append(self._GetFormatStampLine(source))
+        content.append("format: CMakeFiles/format.dir/build.make")
+        return content
 
     def _DumpArrayOfLinesIntoOutputFile(self, content, outputfile, replacementdict=None, append_or_write="w"):
         with codecs.open(outputfile, append_or_write, encoding='utf_8') as file:
