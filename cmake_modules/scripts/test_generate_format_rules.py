@@ -36,6 +36,11 @@ class Testclassname(unittest.TestCase):
         expected_line="\t/usr/bin/clang-format -i /home/foo/bar/lib/src/main.cpp"
         self.assertEqual(expected_line,self.m_format_rule_creator._GetFourthLineOfStampeRecipe(sourcefile))
     
+    def test_GetFourthLineOfStampRecipe_unknown_file_tyoe(self):
+        sourcefile="/home/foo/bar/lib/src/main.wtf"
+        expected_line="\techo \"No known formatting tool for /home/foo/bar/lib/src/main.wtf\""
+        self.assertEqual(expected_line,self.m_format_rule_creator._GetFourthLineOfStampeRecipe(sourcefile))
+    
     def test_GetFourthLineOfStampRecipe_python_file(self):
         sourcefile="/home/foo/bar/lib/src/script.py"
         self.m_format_rule_creator.python_format_tool="/usr/bin/autopep8 -i"

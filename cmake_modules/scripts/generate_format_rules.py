@@ -55,6 +55,7 @@ class FormatRuleCreator:
             return str("\t{} {}".format(self.cpp_format_tool, sourcefile))
         if extansion in ["py"]:
             return str("\t{} {}".format(self.python_format_tool, sourcefile))
+        return str("\techo \"No known formatting tool for {}\"".format(sourcefile))
 
     def _GetFifthLineOfStampRecipe(self, sourcefile):
         return str("\t/usr/bin/cmake -E touch {}".format(os.path.abspath(self._GetStampFileAbsolutePath(sourcefile))))
