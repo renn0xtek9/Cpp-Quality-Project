@@ -88,6 +88,11 @@ class Testclassname(unittest.TestCase):
         self.assertEqual(len(expected_content),len(content))
         for i in range(0,len(expected_content)):
             self.assertEqual(expected_content[i],content[i])
+            
+    def test_GetFormatStampLine(self):
+        sourcefile="/home/foo/bar/lib/src/file.cpp"
+        expected_content="format: lib/src/file.cpp.stamp"
+        self.assertEqual(expected_content,self.m_unit._GetFormatStampLine(sourcefile))
         
 
 
