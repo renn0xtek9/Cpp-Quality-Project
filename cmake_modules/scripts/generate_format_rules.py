@@ -72,6 +72,14 @@ class FormatRuleCreator:
         content.append(self._GetFourthLineOfStampeRecipe(sourcefile))
         content.append(self._GetFifthLineOfStampRecipe(sourcefile))
         return content
+    
+    def _GetStampRecipeSection(self):
+        content=list()
+        sourcefiles = self._GetListOfAbsolutePathOfRelevantFiles()
+        for i in range(0,len(sourcefiles)):
+            content.extend(self._GetArrayOfLinesForStampRecipe(sourcefiles[i],i))
+            content.extend([""])
+        return content
 
     def _GetCMakeFilesFormatContent(self, sourcefiles=list()):
         """This is the first block of the dynamically-written part of the build.make rule
@@ -101,7 +109,7 @@ class FormatRuleCreator:
             [code_generation_directory, "format_rules_header.in"]), rule_make_file, None, 'w')
         self._DumpArrayOfLinesIntoOutputFile(self._GetCMakeFilesFormatContent(
             self._GetListOfAbsolutePathOfRelevantFiles()), rule_make_file, None, 'a')
-        # TODO dump the blcok
+        self._DumpArrayOfLinesIntoOutputFile(self._GetStampRecipeSection())
         # TODO dump the third dynamic content part
         self._DumpFileIntoOutputFile(os.sep.join(
             [code_generation_directory, "format_rules_footer.in"]), rule_make_file, None, 'a')
