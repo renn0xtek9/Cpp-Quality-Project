@@ -26,7 +26,6 @@ class FormatRuleCreator:
 
     def _GetListOfAbsolutePathOfRelevantFiles(self):
         relevant_source_files = list()
-        relevant_file_extensions = ".cpp;.h;.hpp"
         os.chdir(self.repository)
         files = glob.glob("**", recursive=True)
         for filepath in files:
@@ -35,12 +34,6 @@ class FormatRuleCreator:
                     relevant_source_files.append(os.sep.join([self.repository, filepath]))
         return relevant_source_files
 
-    def _GetFirstLineOfStampRecipe(self, sourcefile):
-        return "{}.stamp: {}".format(os.path.relpath(sourcefile, self.repository), os.path.relpath(sourcefile, self.builddirectory))
-
-    def _GetSecondLineOfStampRecipe(self, sourcefile, sourcefilenumber):
-        return str("	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir={} --progress-num=$(CMAKE_PROGRESS_{}) \"Formatting {} and stamping it with {}\"".format(os.sep.join([self.builddirectory, "CMakeFiles"]), sourcefilenumber, os.path.basename(sourcefile), self._GetStampFileAbsolutePath(sourcefile)))
-
     def _GetFullPathToSourceFileInsideTheBuildDirectory(self, sourcefile):
         path_inside_repository = os.path.commonpath([self.repository, os.path.abspath(sourcefile)])
         path_inside_builddirectory = os.path.abspath(sourcefile).replace(path_inside_repository, self.builddirectory)
@@ -48,6 +41,13 @@ class FormatRuleCreator:
 
     def _GetStampFileAbsolutePath(self, sourcefile):
         return str("{}.stamp".format(self._GetFullPathToSourceFileInsideTheBuildDirectory(sourcefile)))
+
+
+    def _GetFirstLineOfStampRecipe(self, sourcefile):
+        return "{}.stamp: {}".format(os.path.relpath(sourcefile, self.repository), os.path.relpath(sourcefile, self.builddirectory))
+
+    def _GetSecondLineOfStampRecipe(self, sourcefile, sourcefilenumber):
+        return str("	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir={} --progress-num=$(CMAKE_PROGRESS_{}) \"Formatting {} and stamping it with {}\"".format(os.sep.join([self.builddirectory, "CMakeFiles"]), sourcefilenumber, os.path.basename(sourcefile), self._GetStampFileAbsolutePath(sourcefile)))
 
     def _GetThirdLineOfStampRecipe(self, sourcefile):
         """When call with /home/max/Projects/testcpp/foo/src/main.cpp, this will return something like 
@@ -101,7 +101,6 @@ class FormatRuleCreator:
         return content
 
     def _DumpArrayOfLinesIntoOutputFile(self, content, outputfile, replacementdict=None, append_or_write="w"):
-        # use a instead of w to append a+ to append/create w+ for write/create
         with codecs.open(outputfile, append_or_write, encoding='utf_8') as file:
             file.write('\n'.join(content))
 
