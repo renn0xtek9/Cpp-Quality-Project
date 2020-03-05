@@ -69,11 +69,15 @@ class Testclassname(unittest.TestCase):
         test_repository = os.sep.join(
             [self.current_file_directory, "generate_format_rules_tests", "resources", "repository1"])
         test_builddirectory = os.sep.join([test_repository, "build"])
-        self.m_unit = FormatRuleCreator(test_builddirectory, test_repository)
+        self.m_unit = FormatRuleCreator(test_builddirectory, test_repository,cpp_format_tool="/usr/bin/clang -i")
         self.assertEqual([os.sep.join([test_repository, "foo.cpp"]),
                           os.sep.join([test_repository, "src", "foobar.cpp"]),
                           os.sep.join([test_repository, "bar.cpp"])], self.m_unit._GetListOfAbsolutePathOfRelevantFiles())
-
+    
+    def test_RelevantExtansionFilesSetAutomaticaly(self):
+        unit=FormatRuleCreator("build", "/home/foo/bar/",cpp_format_tool="/usr/bin/clang-format -i")
+        self.assertEqual(["hxx","cxx","cpp","hpp","h"],unit.relevant_extansions)
+        
     def test_GetArrayOfLinesForStampRecipe(self):
         expected_content=['main.cpp.stamp: ../main.cpp',
         '	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/foo/bar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Formatting main.cpp and stamping it with /home/foo/bar/build/main.cpp.stamp"',

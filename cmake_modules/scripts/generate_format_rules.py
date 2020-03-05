@@ -6,7 +6,7 @@ import codecs
 
 
 class FormatRuleCreator:
-    def __init__(self, builddirectory, repository, cpp_format_tool=None, python_format_tool=None, qml_format_tool=None):
+    def __init__(self, builddirectory, repository, cpp_format_tool=None,c_header_as_cpp=True, python_format_tool=None, qml_format_tool=None):
         self.repository = repository
         self.cpp_format_tool = cpp_format_tool
         self.python_format_tool = python_format_tool
@@ -14,6 +14,15 @@ class FormatRuleCreator:
         self.builddirectory = builddirectory
         if not os.path.isabs(builddirectory):
             self.builddirectory = os.path.normpath(os.sep.join([self.repository, builddirectory]))
+        self.relevant_extansions=list()
+        if cpp_format_tool:
+            self.relevant_extansions.extend(["hxx","cxx","cpp","hpp"])
+            if c_header_as_cpp:
+                self.relevant_extansions.extend(["h"])
+        if python_format_tool:
+            self.relevant_extansions.extend(["py"])
+        if qml_format_tool:
+            self.relevant_extansions.extend(["qml"])
 
     def _GetListOfAbsolutePathOfRelevantFiles(self):
         relevant_source_files = list()
@@ -21,8 +30,8 @@ class FormatRuleCreator:
         os.chdir(self.repository)
         files = glob.glob("**", recursive=True)
         for filepath in files:
-            for extension in relevant_file_extensions.split(';'):
-                if filepath.split('.')[-1] == extension.replace('.', '') and not str(self.builddirectory+os.sep) in filepath:
+            for extension in self.relevant_extansions:
+                if filepath.split('.')[-1] == extension and not str(self.builddirectory+os.sep) in filepath:
                     relevant_source_files.append(os.sep.join([self.repository, filepath]))
         return relevant_source_files
 
@@ -135,3 +144,8 @@ def main(argv):
 
 # if __name__ == "__main__":
     # main(sys.argv)
+    
+#useage
+#./script.py --cpp-format-tool="/usr/bin/clang-format -i" \
+#--python-format-tool="/usr/bin/autopep8 -i" \
+#--c-header-as-cpp
