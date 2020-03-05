@@ -46,6 +46,11 @@ class Testclassname(unittest.TestCase):
         self.m_format_rule_creator.python_format_tool="/usr/bin/autopep8 -i"
         expected_line="\t/usr/bin/autopep8 -i /home/foo/bar/lib/src/script.py"
         self.assertEqual(expected_line,self.m_format_rule_creator._GetFourthLineOfStampeRecipe(sourcefile))
+        
+    def test_GetFourthLineOfStampRecipe_python_file_but_unspecified_tool(self):
+        sourcefile="/home/foo/bar/lib/src/script.py"
+        expected_line="\techo \"No known formatting tool for /home/foo/bar/lib/src/script.py\""
+        self.assertEqual(expected_line,self.m_format_rule_creator._GetFourthLineOfStampeRecipe(sourcefile))
     
     def test_GetFifthLineOfStampRecipe(self):
         sourcefile="/home/foo/bar/lib/src/main.cpp"

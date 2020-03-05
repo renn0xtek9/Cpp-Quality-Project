@@ -9,6 +9,8 @@ class FormatRuleCreator:
     def __init__(self, builddirectory, repository, cpp_format_tool=None, python_format_tool=None, qml_format_tool=None):
         self.repository = repository
         self.cpp_format_tool = cpp_format_tool
+        self.python_format_tool = python_format_tool
+        self.qml_format_tool = qml_format_tool
         self.builddirectory = builddirectory
         if not os.path.isabs(builddirectory):
             self.builddirectory = os.path.normpath(os.sep.join([self.repository, builddirectory]))
@@ -50,10 +52,10 @@ class FormatRuleCreator:
     def _GetFourthLineOfStampeRecipe(self, sourcefile):
         """When call with  /home/max/Projects/testcpp/foo/src/main.cpp, this will return 
         /usr/bin/clang-format -i /home/max/Projects/testcpp/foo/src/main.cpp"""
-        extansion=sourcefile.split('.')[-1]
-        if extansion in ["h","hpp","cpp","cxx","hxx"]:
+        extansion = sourcefile.split('.')[-1]
+        if extansion in ["h", "hpp", "cpp", "cxx", "hxx"] and self.cpp_format_tool:
             return str("\t{} {}".format(self.cpp_format_tool, sourcefile))
-        if extansion in ["py"]:
+        if extansion in ["py"] and self.python_format_tool:
             return str("\t{} {}".format(self.python_format_tool, sourcefile))
         return str("\techo \"No known formatting tool for {}\"".format(sourcefile))
 
@@ -101,7 +103,6 @@ class FormatRuleCreator:
         # TODO dump the third dynamic content part
         self._DumpFileIntoOutputFile(os.sep.join(
             [code_generation_directory, "format_rules_footer.in"]), rule_make_file, None, 'a')
-
 
 
 def main(argv):
