@@ -57,6 +57,8 @@ class FormatRuleCreator:
             return str("\t{} {}".format(self.cpp_format_tool, sourcefile))
         if extansion in ["py"] and self.python_format_tool:
             return str("\t{} {}".format(self.python_format_tool, sourcefile))
+        if extansion in ["qml"] and self.qml_format_tool:
+            return str("\t{} {}".format(self.python_format_tool, sourcefile))
         return str("\techo \"No known formatting tool for {}\"".format(sourcefile))
 
     def _GetFifthLineOfStampRecipe(self, sourcefile):
