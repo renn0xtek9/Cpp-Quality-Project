@@ -9,6 +9,7 @@ relevant_file_extensions = None
 
 class Testclassname(unittest.TestCase):
     def setUp(self):
+        self.maxDiff=None
         self.m_format_rule_creator = FormatRuleCreator("build", "/home/foo/bar/",cpp_format_tool="/usr/bin/clang-format -i")
         self.current_file_directory = os.path.dirname(os.path.abspath(__file__))
         pass
@@ -34,16 +35,16 @@ class Testclassname(unittest.TestCase):
                          self.m_format_rule_creator.AsbolutePathToSourceFile("/tmp/build", "subfolder/main.cpp", "/home/foo/bar/"))
 
     def test_GetFirstLineOfStampRecipe(self):
-        self.assertEqual("main.cpp.stamp: /home/foo/bar/main.cpp",
-                         self.m_format_rule_creator.GetFirstLineOfStampRecipe("main.cpp"))
+        self.assertEqual("main.cpp.stamp: ../main.cpp",
+                         self.m_format_rule_creator.GetFirstLineOfStampRecipe("/home/foo/bar/main.cpp"))
 
     def test_GetFirstLineOfStampRecipe_source_in_subfolder(self):
-        self.assertEqual("subfolder/main.cpp.stamp: /home/foo/bar/subfolder/main.cpp",
-                         self.m_format_rule_creator.GetFirstLineOfStampRecipe("subfolder/main.cpp"))
+        self.assertEqual("subfolder/main.cpp.stamp: ../subfolder/main.cpp",
+                         self.m_format_rule_creator.GetFirstLineOfStampRecipe("/home/foo/bar/subfolder/main.cpp"))
 
     def test_GetSecondLineOfStampRecipe(self):
-        self.assertEqual("\t@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/max/Projects/testcpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) \"Formatting /home/max/Projects/testcpp/main.cpp and stamping it with /home/max/Projects/testcpp/build/main.cpp.stamp\"",
-                         self.m_format_rule_creator.GetSecondLineOfStampRecipe("main.cpp", 12))
+        self.assertEqual("\t@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/foo/bar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) \"Formatting main.cpp and stamping it with /home/foo/bar/build/main.cpp.stamp\"",
+                         self.m_format_rule_creator.GetSecondLineOfStampRecipe("/home/foo/bar/main.cpp", 12))
 
     def test_GetCMakeFilesFormatContent(self):
         self.assertEqual(["CMakeFiles/format: foobar.cpp.stamp"],
@@ -76,6 +77,17 @@ class Testclassname(unittest.TestCase):
         sourcefile="/home/foo/bar/lib/src/main.cpp"
         expected_line="\t/usr/bin/cmake -E touch /home/foo/bar/build/lib/src/main.cpp.stamp"
         self.assertEqual(expected_line,self.m_format_rule_creator.GetFifthLineOfStampRecipe(sourcefile))
+    
+    def test_GetArrayOfLinesForStampRecipe(self):
+        expected_content=['main.cpp.stamp: ../main.cpp',
+        '	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/foo/bar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Formatting main.cpp and stamping it with /home/foo/bar/build/main.cpp.stamp"',
+        '	/usr/bin/cmake -E make_directory /home/foo/bar/build',
+        '	/usr/bin/clang-format -i /home/foo/bar/main.cpp',
+        '	/usr/bin/cmake -E touch /home/foo/bar/build/main.cpp.stamp']
+        content=self.m_format_rule_creator.GetArrayOfLinesForStampRecipe("/home/foo/bar/main.cpp",1)
+        self.assertEqual(len(expected_content),len(content))
+        for i in range(0,len(expected_content)):
+            self.assertEqual(expected_content[i],content[i])
         
 
 
