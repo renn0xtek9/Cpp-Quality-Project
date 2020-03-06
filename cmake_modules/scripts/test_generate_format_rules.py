@@ -59,11 +59,11 @@ class Testclassname(unittest.TestCase):
 
     def test_GetCMakeFilesFormatContent(self):
         self.assertEqual(["CMakeFiles/format: foobar.cpp.stamp"],
-                         self.m_unit._GetCMakeFilesFormatContent(["foobar.cpp"]))
+                         self.m_unit._GetCMakeFilesFormatContent(["/home/foo/bar/foobar.cpp"]))
 
     def test_GetCMakeFilesFormatContent_in_subfolder(self):
         self.assertEqual(["CMakeFiles/format: foo/bar.cpp.stamp"],
-                         self.m_unit._GetCMakeFilesFormatContent(["foo/bar.cpp"]))
+                         self.m_unit._GetCMakeFilesFormatContent(["/home/foo/bar/foo/bar.cpp"]))
 
     def test_GetListOfAbsolutePathOfRelevantFiles(self):
         test_repository = os.sep.join(
@@ -104,6 +104,30 @@ class Testclassname(unittest.TestCase):
 
     def test_GetMakeRuleFilePath(self):
         self.assertEqual("/home/foo/bar/build/CMakeFiles/format.dir/build.make",self.m_unit._GetMakeRuleFilePath())
+    
+    def test_GetCodeGenerationDirectory(self):
+        expected=os.sep.join([os.path.dirname(os.path.abspath(__file__))])
+        self.assertEqual(expected,self.m_unit._GetCodeGenerationDirectory())
+        
+    def test_GetStampFileAbsolutePath(self):
+        sourcefile="/home/foo/bar/main.cpp"
+        expected="/home/foo/bar/build/main.cpp.stamp"
+        self.assertEqual(expected,self.m_unit._GetStampFileAbsolutePath(sourcefile))
+        
+    def test_GetStampFileAbsolutePath_subdirectory(self):
+        sourcefile="/home/foo/bar/lib/src/main.cpp"
+        expected="/home/foo/bar/build/lib/src/main.cpp.stamp"
+        self.assertEqual(expected,self.m_unit._GetStampFileAbsolutePath(sourcefile))
+        
+    def test_GetStampFileRelativePath(self):
+        sourcefile="/home/foo/bar/main.cpp"
+        expected="main.cpp.stamp"
+        self.assertEqual(expected,self.m_unit._GetStampFileRelativePath(sourcefile))
+        
+    def test_GetStampFileRelativePath_subdirectory(self):
+        sourcefile="/home/foo/bar/lib/src/main.cpp"
+        expected="lib/src/main.cpp.stamp"
+        self.assertEqual(expected,self.m_unit._GetStampFileRelativePath(sourcefile))
 
 
 if __name__ == '__main__':
