@@ -7,7 +7,7 @@ SET (CMAKE_CXX_EXTENSIONS OFF)
 SET (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 LIST (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_modules/)
-INCLUDE (FindAllCppFiles)
+# INCLUDE (FindAllCppFiles)
 INCLUDE (CMakeListsFormatting)
 INCLUDE (format_everything)
 
