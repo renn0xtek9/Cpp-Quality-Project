@@ -102,6 +102,8 @@ class Testclassname(unittest.TestCase):
         "format: CMakeFiles/format.dir/build.make"]
         self.assertEqual(expected,self.m_unit._GetFormatStampBlock(sourcefiles))
 
+    def test_GetMakeRuleFilePath(self):
+        self.assertEqual("/home/foo/bar/build/CMakeFiles/format.dir/build.make",self.m_unit._GetMakeRuleFilePath())
 
 
 if __name__ == '__main__':

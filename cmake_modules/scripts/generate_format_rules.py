@@ -1,9 +1,10 @@
+#!/usr/bin/env python3
 import sys
 import os
 import glob
 import re
 import codecs
-
+import argparse
 
 class FormatRuleCreator:
     def __init__(self, builddirectory, repository, cpp_format_tool=None,c_header_as_cpp=True, python_format_tool=None, qml_format_tool=None):
@@ -119,11 +120,14 @@ class FormatRuleCreator:
     def _DumpFileIntoOutputFile(self, inputfile, outputfile, replacementdict=None, append_or_write="w"):
         content = [line.rstrip('\n') for line in open(inputfile)]
         self._DumpArrayOfLinesIntoOutputFile(content, outputfile, None, append_or_write)
+        
+    def _GetMakeRuleFilePath(self):
+        rule_make_file_list = [self.builddirectory, "CMakeFiles", "format.dir", "build.make"]
+        return os.sep.join(rule_make_file_list)
 
     def WriteMakeFileOfFormattingRule(self):
         """This is the main function that will actually write the build.make for the formatting rule"""
-        rule_make_file_list = [self.builddirectory, "CMakeFiles", "format.dir", "build.make"]
-        rule_make_file = os.sep.join(rule_make_file_list)
+        rule_make_file = self._GetMakeRuleFilePath()
         code_generation_directory = os.sep.join(["cmake_modules", "scripts"])
         self._DumpFileIntoOutputFile(os.sep.join(
             [code_generation_directory, "format_rules_header.in"]), rule_make_file, None, 'w')
@@ -136,25 +140,18 @@ class FormatRuleCreator:
 
 
 def main(argv):
-    builddirectory = sys.argv[1]
-    # relevant_file_extensions=sys.argv[2]
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-b","--build-directory",help="build directory",required=True)
+    ap.add_argument("-r","--repository",help="repository",required=True)
+    ap.add_argument("--cpp-format-tool",help="cpp file form",required=False)
+    ap.add_argument("--python-format-tool",help="python file formatting command",required=False)
+    ap.add_argument("--qml-format-tool",help="qml file formatting command",required=False)
+    args = vars(ap.parse_args())
+    
+    
 
-    print("Generating Format rule in {}".format(builddirectory))
-    print(os.getcwd())
-
-    relevant_source_files = list()
-    files = glob.glob("**", recursive=True)
-    for filepath in files:
-        for extension in relevant_file_extensions.split(';'):
-            if filepath.split('.')[-1] == extension.replace('.', '') and not str(builddirectory+os.sep) in filepath:
-                relevant_source_files.append(filepath)
-
-    DumpArrayOfLinesIntoOutputFile(GetCMakeFilesFormatContent(relevant_source_files),
-                                   os.sep.join(rule_make_file_list), None, 'a')
-
-
-# if __name__ == "__main__":
-    # main(sys.argv)
+if __name__ == "__main__":
+    main(sys.argv)
     
 #useage
 #./script.py --cpp-format-tool="/usr/bin/clang-format -i" \
