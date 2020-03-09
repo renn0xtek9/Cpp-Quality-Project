@@ -12,6 +12,6 @@ int returnvecsize() {
 
 int main(int argc, char** argv) {
   if (returnvecsize()) std::cout << "done" << std::endl;
-  std::cout << "Version" << getVersion();
+  std::cout << "Version: " << getVersion();
   return 0;
 }
