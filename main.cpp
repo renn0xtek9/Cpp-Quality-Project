@@ -2,6 +2,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include "version.hpp"
 
 int returnvecsize() {
   std::vector<int> vec;
@@ -10,6 +11,7 @@ int returnvecsize() {
 }
 
 int main(int argc, char** argv) {
-  if (returnvecsize()) std::cout << "done";
+  if (returnvecsize()) std::cout << "done" << std::endl;
+  std::cout << "Version" << getVersion();
   return 0;
 }

@@ -1,0 +1,7 @@
+#define VERSION @GIT_HASH@
+
+
+const char* getVersion()
+{
+    return "@GIT_HASH@";
+}
