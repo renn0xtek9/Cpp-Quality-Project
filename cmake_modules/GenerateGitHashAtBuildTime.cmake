@@ -1,7 +1,8 @@
 EXECUTE_PROCESS (
   COMMAND git rev-parse --short HEAD
   RESULT_VARIABLE SHORT_HASH_RESULT
-  OUTPUT_VARIABLE SHORT_HASH)
+  OUTPUT_VARIABLE SHORT_HASH
+  OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
 
 # If running in script mode (this runs on every build)
 IF (CMAKE_SCRIPT_MODE_FILE)
@@ -33,6 +34,8 @@ ELSE ()
 
   # This configure_file makes cmake reconfigure dependent on short_hash.txt
   CONFIGURE_FILE (${SHORT_HASH_FILE} ${SHORT_HASH_FILE}.junk COPYONLY)
+  CONFIGURE_FILE (${CMAKE_SOURCE_DIR}/version.hpp.in
+                  ${CMAKE_BINARY_DIR}/version.hpp)
 
   MESSAGE (STATUS "Short Hash: ${SHORT_HASH}")
 ENDIF ()
