@@ -16,17 +16,19 @@
 # rule to make target '../probelibrary/include/wtf.h', needed by
 # 'probelibrary/include/wtf.h.stamp'.  Stop.
 
+# We reference a file that will never actually get created on purpose: we want
+# this rule to be executed all the time !
 ADD_CUSTOM_TARGET (
   create-format-rule ALL
   COMMENT "Create format make rule"
   DEPENDS
-    ${CMAKE_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log
+    ${CMAKE_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log.stamp
 )
 
+# Mention has output but don't really produce it on purpose !
 ADD_CUSTOM_COMMAND (
   OUTPUT
-    ${CMAKE_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log
-    # OUTPUT ${CMAKE_BINARY_DIR}/CMakeFiles/format.dir/build.make
+    ${CMAKE_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log.stamp
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   COMMAND cmake -E make_directory ${CMAKE_BINARY_DIR}/CMakeFiles/format.dir
   COMMAND echo "Generate format rules"
@@ -37,6 +39,4 @@ ADD_CUSTOM_COMMAND (
     >${CMAKE_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log
 )
 
-ADD_CUSTOM_TARGET (
-  format ALL # DEPENDS ${CMAKE_BINARY_DIR}/CMakeFiles/format.dir/build.make
-  DEPENDS create-format-rule)
+ADD_CUSTOM_TARGET (format ALL DEPENDS create-format-rule)
