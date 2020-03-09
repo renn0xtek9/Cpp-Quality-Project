@@ -9,7 +9,8 @@ SET (CMAKE_CXX_STANDARD_REQUIRED ON)
 LIST (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_modules/)
 INCLUDE (CMakeListsFormatting)
 INCLUDE (FormatEverything)
-INCLUDE (git_hash_version)
+INCLUDE (GenerateGitHashAtConfigTime)
+INCLUDE (GenerateGitHashAtBuildTime)
 
 ADD_SUBDIRECTORY (probelibrary)
 
