@@ -1,5 +1,5 @@
 ENABLE_TESTING ()
-SET (LIBNAME wtf)
+SET (LIBNAME probe)
 SET (LIBSRC src/probe.cpp)
 SET (LIBHDRS include/probe.h)
 
