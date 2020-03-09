@@ -7,7 +7,7 @@ import codecs
 import argparse
 
 class FormatRuleCreator:
-    def __init__(self, builddirectory, repository, cpp_format_tool=None,c_header_as_cpp=True, python_format_tool=None, qml_format_tool=None):
+    def __init__(self, builddirectory, repository, cpp_format_tool=None, c_header_as_cpp=True, python_format_tool=None, qml_format_tool=None):
         self.repository = repository
         self.cpp_format_tool = cpp_format_tool
         self.python_format_tool = python_format_tool
@@ -15,9 +15,9 @@ class FormatRuleCreator:
         self.builddirectory = builddirectory
         if not os.path.isabs(builddirectory):
             self.builddirectory = os.path.normpath(os.sep.join([self.repository, builddirectory]))
-        self.relevant_extansions=list()
+        self.relevant_extansions = list()
         if cpp_format_tool:
-            self.relevant_extansions.extend(["hxx","cxx","cpp","hpp"])
+            self.relevant_extansions.extend(["hxx", "cxx", "cpp", "hpp"])
             if c_header_as_cpp:
                 self.relevant_extansions.extend(["h"])
         if python_format_tool:
@@ -25,7 +25,7 @@ class FormatRuleCreator:
         if qml_format_tool:
             self.relevant_extansions.extend(["qml"])
 
-    def _GetListOfAbsolutePathOfRelevantFiles(self):
+    def __GetListOfAbsolutePathOfRelevantFiles(self):
         relevant_source_files = list()
         os.chdir(self.repository)
         files = glob.glob("**", recursive=True)
@@ -35,34 +35,36 @@ class FormatRuleCreator:
                     relevant_source_files.append(os.sep.join([self.repository, filepath]))
         return relevant_source_files
 
-    def _GetFullPathToSourceFileInsideTheBuildDirectory(self, sourcefile):
+    def __GetFullPathToSourceFileInsideTheBuildDirectory(self, sourcefile):
         path_inside_repository = os.path.commonpath([self.repository, os.path.abspath(sourcefile)])
         path_inside_builddirectory = os.path.abspath(sourcefile).replace(path_inside_repository, self.builddirectory)
         return path_inside_builddirectory
 
-    def _GetStampFileAbsolutePath(self, sourcefile):
-        return str("{}.stamp".format(self._GetFullPathToSourceFileInsideTheBuildDirectory(sourcefile)))
-    
-    def _GetStampFileRelativePath(self, sourcefile):
-        stampfile=self._GetStampFileAbsolutePath(sourcefile)
-        return os.path.relpath(stampfile,self.builddirectory)
+    def __GetStampFileAbsolutePath(self, sourcefile):
+        return str("{}.stamp".format(self.
+                                     __GetFullPathToSourceFileInsideTheBuildDirectory
+                                     (sourcefile)))
 
-    def _GetFirstLineOfStampRecipe(self, sourcefile):
+    def __GetStampFileRelativePath(self, sourcefile):
+        stampfile = self.__GetStampFileAbsolutePath(sourcefile)
+        return os.path.relpath(stampfile, self.builddirectory)
+
+    def __GetFirstLineOfStampRecipe(self, sourcefile):
         return "{}.stamp: {}".format(os.path.relpath(sourcefile, self.repository), os.path.relpath(sourcefile, self.builddirectory))
 
-    def _GetSecondLineOfStampRecipe(self, sourcefile, sourcefilenumber):
-        return str("	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir={} --progress-num=$(CMAKE_PROGRESS_{}) \"Formatting {} and stamping it with {}\"".format(os.sep.join([self.builddirectory, "CMakeFiles"]), sourcefilenumber, os.path.basename(sourcefile), self._GetStampFileAbsolutePath(sourcefile)))
+    def __GetSecondLineOfStampRecipe(self, sourcefile, sourcefilenumber):
+        return str("	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir={} --progress-num=$(CMAKE_PROGRESS_{}) \"Formatting {} and stamping it with {}\"".format(os.sep.join([self.builddirectory, "CMakeFiles"]), sourcefilenumber, os.path.basename(sourcefile), self.__GetStampFileAbsolutePath(sourcefile)))
 
-    def _GetThirdLineOfStampRecipe(self, sourcefile):
+    def __GetThirdLineOfStampRecipe(self, sourcefile):
         """When call with /home/max/Projects/testcpp/foo/src/main.cpp, this will return something like 
         /usr/bin/cmake -E make_directory build/foo/src
         """
         # path_inside_repository=os.path.commonpath([self.repository,os.path.abspath(sourcefile)])
         # path_inside_builddirectory=os.path.abspath(sourcefile).replace(path_inside_repository,self.builddirectory)
-        path_inside_builddirectory = self._GetFullPathToSourceFileInsideTheBuildDirectory(sourcefile)
+        path_inside_builddirectory = self.__GetFullPathToSourceFileInsideTheBuildDirectory(sourcefile)
         return str("\t/usr/bin/cmake -E make_directory "+os.path.abspath(os.path.join(path_inside_builddirectory, os.pardir)))
 
-    def _GetFourthLineOfStampeRecipe(self, sourcefile):
+    def __GetFourthLineOfStampeRecipe(self, sourcefile):
         """When call with  /home/max/Projects/testcpp/foo/src/main.cpp, this will return 
         /usr/bin/clang-format -i /home/max/Projects/testcpp/foo/src/main.cpp"""
         extansion = sourcefile.split('.')[-1]
@@ -74,105 +76,105 @@ class FormatRuleCreator:
             return str("\t{} {}".format(self.python_format_tool, sourcefile))
         return str("\techo \"No known formatting tool for {}\"".format(sourcefile))
 
-    def _GetFifthLineOfStampRecipe(self, sourcefile):
-        return str("\t/usr/bin/cmake -E touch {}".format(os.path.abspath(self._GetStampFileAbsolutePath(sourcefile))))
+    def __GetFifthLineOfStampRecipe(self, sourcefile):
+        return str("\t/usr/bin/cmake -E touch {}".format(os.path.abspath(self.__GetStampFileAbsolutePath(sourcefile))))
 
-    def _GetArrayOfLinesForStampRecipe(self, sourcefile, sourcefilenumber):
+    def __GetArrayOfLinesForStampRecipe(self, sourcefile, sourcefilenumber):
         content = list()
-        content.append(self._GetFirstLineOfStampRecipe(sourcefile))
-        content.append(self._GetSecondLineOfStampRecipe(sourcefile, sourcefilenumber))
-        content.append(self._GetThirdLineOfStampRecipe(sourcefile))
-        content.append(self._GetFourthLineOfStampeRecipe(sourcefile))
-        content.append(self._GetFifthLineOfStampRecipe(sourcefile))
+        content.append(self.__GetFirstLineOfStampRecipe(sourcefile))
+        content.append(self.__GetSecondLineOfStampRecipe(sourcefile, sourcefilenumber))
+        content.append(self.__GetThirdLineOfStampRecipe(sourcefile))
+        content.append(self.__GetFourthLineOfStampeRecipe(sourcefile))
+        content.append(self.__GetFifthLineOfStampRecipe(sourcefile))
         return content
-    
-    def _GetStampRecipeSection(self):
-        content=list()
-        sourcefiles = self._GetListOfAbsolutePathOfRelevantFiles()
-        for i in range(0,len(sourcefiles)):
-            content.extend(self._GetArrayOfLinesForStampRecipe(sourcefiles[i],i))
+
+    def __GetStampRecipeSection(self):
+        content = list()
+        sourcefiles = self.__GetListOfAbsolutePathOfRelevantFiles()
+        for i in range(0, len(sourcefiles)):
+            content.extend(self.__GetArrayOfLinesForStampRecipe(sourcefiles[i], i))
             content.extend([""])
         return content
 
-    def _GetCMakeFilesFormatContent(self, sourcefiles=list()):
+    def __GetCMakeFilesFormatContent(self, sourcefiles=list()):
         """This is the first block of the dynamically-written part of the build.make rule
         it produces ouptut like 
         CMakeFiles/format: foobar.cpp.stamp
         """
         content = list()
         for sourcefile in sourcefiles:
-            content.append("CMakeFiles/format: "+self._GetStampFileRelativePath(sourcefile))
+            content.append("CMakeFiles/format: "+self.__GetStampFileRelativePath(sourcefile))
         return content
-    
-    
-    def _GetFormatStampLine(self,sourcefile):
-        stampfile=self._GetStampFileAbsolutePath(sourcefile)
-        stampfile_relative=os.path.relpath(stampfile,self.builddirectory)
+
+    def __GetFormatStampLine(self, sourcefile):
+        stampfile = self.__GetStampFileAbsolutePath(sourcefile)
+        stampfile_relative = os.path.relpath(stampfile, self.builddirectory)
         return str("format: {}".format(stampfile_relative))
-    
-    def _GetFormatStampBlock(self,sourcefiles):
-        content=["format: CMakeFiles/format"]
+
+    def __GetFormatStampBlock(self, sourcefiles):
+        content = ["format: CMakeFiles/format"]
         for source in sourcefiles:
-            content.append(self._GetFormatStampLine(source))
+            content.append(self.__GetFormatStampLine(source))
         content.append("format: CMakeFiles/format.dir/build.make")
         return content
 
-    def _DumpArrayOfLinesIntoOutputFile(self, content, outputfile, replacementdict=None, append_or_write="a"):
+    def __DumpArrayOfLinesIntoOutputFile(self, content, outputfile, replacementdict=None, append_or_write="a"):
         with codecs.open(outputfile, append_or_write, encoding='utf_8') as file:
             file.write('\n'.join(content))
-            
-    def _DumpFileIntoOutputFile(self, inputfile, outputfile, replacementdict=None, append_or_write="a"):
+
+    def __DumpFileIntoOutputFile(self, inputfile, outputfile, replacementdict=None, append_or_write="a"):
         content = [line.rstrip('\n') for line in open(inputfile)]
-        print("For input file"+inputfile + "  " +append_or_write + "----------" + outputfile)
+        print("For input file"+inputfile + "  " + append_or_write + "----------" + outputfile)
         print("Dumping "+'\n'.join(content))
-        self._DumpArrayOfLinesIntoOutputFile(content, outputfile, None, append_or_write)
-        
-    def _GetMakeRuleFilePath(self):
+        self.__DumpArrayOfLinesIntoOutputFile(content, outputfile, None, append_or_write)
+
+    def __GetMakeRuleFilePath(self):
         rule_make_file_list = [self.builddirectory, "CMakeFiles", "format.dir", "build.make"]
         return os.sep.join(rule_make_file_list)
-    
-    def _GetCodeGenerationDirectory(self):
+
+    def __GetCodeGenerationDirectory(self):
         return os.path.dirname(os.path.abspath(__file__))
-    
-    def _WriteLineBreaksInOutputFile (self,
-				       number_of_line_breaks):
-        rule_make_file = self._GetMakeRuleFilePath()
-        for i in range (0, number_of_line_breaks):
-            self._DumpArrayOfLinesIntoOutputFile(['\n'],rule_make_file,'a')
+
+    def __WriteLineBreaksInOutputFile(self,
+                                      number_of_line_breaks):
+        rule_make_file = self.__GetMakeRuleFilePath()
+        for i in range(0, number_of_line_breaks):
+            self.__DumpArrayOfLinesIntoOutputFile(['\n'], rule_make_file, 'a')
 
     def WriteMakeFileOfFormattingRule(self):
         """This is the main function that will actually write the build.make for the formatting rule"""
-        rule_make_file = self._GetMakeRuleFilePath()
-        code_generation_directory = self._GetCodeGenerationDirectory()
-        self._DumpFileIntoOutputFile(os.sep.join(
+        rule_make_file = self.__GetMakeRuleFilePath()
+        code_generation_directory = self.__GetCodeGenerationDirectory()
+        self.__DumpFileIntoOutputFile(os.sep.join(
             [code_generation_directory, "format_rules_header.in"]), rule_make_file, None, 'w')
-        self._WriteLineBreaksInOutputFile (2)
-        self._DumpArrayOfLinesIntoOutputFile(self._GetCMakeFilesFormatContent(
-            self._GetListOfAbsolutePathOfRelevantFiles()), rule_make_file, None, 'a')
-        self._WriteLineBreaksInOutputFile (2)
-        self._DumpArrayOfLinesIntoOutputFile(self._GetStampRecipeSection(),rule_make_file,None,'a')
-        self._WriteLineBreaksInOutputFile (2)
-        self._DumpArrayOfLinesIntoOutputFile(self._GetFormatStampBlock(self._GetListOfAbsolutePathOfRelevantFiles()),rule_make_file,None,'a')
-        self._WriteLineBreaksInOutputFile (2)
-        self._DumpFileIntoOutputFile(os.sep.join(
+        self.__WriteLineBreaksInOutputFile(2)
+        self.__DumpArrayOfLinesIntoOutputFile(self.__GetCMakeFilesFormatContent(
+            self.__GetListOfAbsolutePathOfRelevantFiles()), rule_make_file, None, 'a')
+        self.__WriteLineBreaksInOutputFile(2)
+        self.__DumpArrayOfLinesIntoOutputFile(self.__GetStampRecipeSection(), rule_make_file, None, 'a')
+        self.__WriteLineBreaksInOutputFile(2)
+        self.__DumpArrayOfLinesIntoOutputFile(self.__GetFormatStampBlock(
+            self.__GetListOfAbsolutePathOfRelevantFiles()), rule_make_file, None, 'a')
+        self.__WriteLineBreaksInOutputFile(2)
+        self.__DumpFileIntoOutputFile(os.sep.join(
             [code_generation_directory, "format_rules_footer.in"]), rule_make_file, None, 'a')
 
 
 def main(argv):
     ap = argparse.ArgumentParser()
-    ap.add_argument("-b","--build-directory",help="build directory",required=True)
-    ap.add_argument("-r","--repository",help="repository",required=True)
-    ap.add_argument("--cpp-format-tool",help="cpp file form",required=False)
-    ap.add_argument("--c-header-as-cpp",help="c header ('*.h') are treated as cpp headers",required=False)
-    ap.add_argument("--python-format-tool",help="python file formatting command",required=False)
-    ap.add_argument("--qml-format-tool",help="qml file formatting command",required=False)
+    ap.add_argument("-b", "--build-directory", help="build directory", required=True)
+    ap.add_argument("-r", "--repository", help="repository", required=True)
+    ap.add_argument("--cpp-format-tool", help="cpp file form", required=False)
+    ap.add_argument("--c-header-as-cpp", help="c header ('*.h') are treated as cpp headers", required=False)
+    ap.add_argument("--python-format-tool", help="python file formatting command", required=False)
+    ap.add_argument("--qml-format-tool", help="qml file formatting command", required=False)
     args = vars(ap.parse_args())
-    
-    creator=FormatRuleCreator(args['build_directory'],args['repository'],cpp_format_tool=args['cpp_format_tool'],
-                              c_header_as_cpp=args['c_header_as_cpp'],python_format_tool=args['python_format_tool'],
-                              qml_format_tool=args['qml_format_tool'])
+
+    creator = FormatRuleCreator(args['build_directory'], args['repository'], cpp_format_tool=args['cpp_format_tool'],
+                                c_header_as_cpp=args['c_header_as_cpp'], python_format_tool=args['python_format_tool'],
+                                qml_format_tool=args['qml_format_tool'])
     creator.WriteMakeFileOfFormattingRule()
+
 
 if __name__ == "__main__":
     main(sys.argv)
-    
