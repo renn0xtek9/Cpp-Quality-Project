@@ -37,7 +37,7 @@ ADD_CUSTOM_COMMAND (
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/scripts/generate_format_rules.py
     --build-directory ${CMAKE_BINARY_DIR} --repository ${CMAKE_SOURCE_DIR}
     --cpp-format-tool "/usr/bin/clang-format -i"
-    >${CMAKE_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log
+    >${PROJECT_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log
 )
 
 ADD_CUSTOM_TARGET (format ALL DEPENDS create-format-rule)
