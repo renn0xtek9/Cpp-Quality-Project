@@ -29,11 +29,12 @@ ADD_CUSTOM_TARGET (
 ADD_CUSTOM_COMMAND (
   OUTPUT
     ${CMAKE_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log.stamp
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   COMMAND cmake -E make_directory ${CMAKE_BINARY_DIR}/CMakeFiles/format.dir
   COMMAND echo "Generate format rules"
   COMMAND
-    python3 ${CMAKE_SOURCE_DIR}/cmake_modules/scripts/generate_format_rules.py
+    python3
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/scripts/generate_format_rules.py
     --build-directory ${CMAKE_BINARY_DIR} --repository ${CMAKE_SOURCE_DIR}
     --cpp-format-tool "/usr/bin/clang-format -i"
     >${CMAKE_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log

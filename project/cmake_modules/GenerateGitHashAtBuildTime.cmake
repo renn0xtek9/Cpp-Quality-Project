@@ -34,7 +34,7 @@ ELSE ()
 
   # This configure_file makes cmake reconfigure dependent on short_hash.txt
   CONFIGURE_FILE (${SHORT_HASH_FILE} ${SHORT_HASH_FILE}.junk COPYONLY)
-  CONFIGURE_FILE (${CMAKE_SOURCE_DIR}/version.hpp.in
+  CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/version.hpp.in
                   ${CMAKE_BINARY_DIR}/version.hpp)
 
   MESSAGE (STATUS "Short Hash: ${SHORT_HASH}")
