@@ -1,4 +1,7 @@
-# Testcpp
+# Cpp Project Template
+## Folder structure 
+* ./project is where the template project in itself lays. When starting a new c++ project, you may copy/paste it 
+* ./workflow_test is where tests regarding the workflow with the template project are located (ensuring that various cmake rules work well) 
 
 ## TODO 
 * [ ] Make a test that calls valgrind with memcheck to evaluate memory leaks 
