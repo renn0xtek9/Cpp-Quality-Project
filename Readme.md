@@ -23,24 +23,27 @@
     ```
     cmake ..
     make all
-    
     ```
     build/version.hpp should show latest git commit 
     
 
 #### Scenario: Actual built but new commit 
     Build directory is empty 
-    **RUN** cmake.. 
+    
+    ```
+    cmake.. 
     make all 
     touch ./../foobar
     git add foobar
     git commit -m "Just a new commit"
     make all
+    ```
     
     build/version.hpp should show latest git commit 
     
 #### Actual build no new commit but new generation file 
     Build directory is emptty 
+    ```
     cmake ..
     make all 
     touch ./../foobar 
@@ -48,5 +51,6 @@
     git commit -m "Just a new commit"
     sed 's/getGitShortHash/getGitShortHash2/g' ./../version.hpp.in
     make all 
+    ```
     
     version.hpp should show latest git commit with latest version file (getGitShortHash2)
