@@ -33,3 +33,5 @@ ADD_CUSTOM_TARGET (benchmark COMMAND $<TARGET_FILE:probe_benchmark> >
                                      ${CMAKE_SOURCE_DIR}/benchmark_report.txt)
 
 ADD_DEPENDENCIES (${EXENAME} format)
+
+ADD_SUBDIRECTORY (documentation)
