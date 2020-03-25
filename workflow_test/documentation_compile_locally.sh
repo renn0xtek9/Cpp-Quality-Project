@@ -6,9 +6,9 @@ cp -r project $TMP
 cd $TMP 
 cd project
 mkdir -p build
-cmake -G "Unix Makefiles" --build build -DCMAKE_BUILD_TYPE=Debug .
+cd build 
+cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug ..
 echo "Will make documentation"
-cd build
 make software-intern-development
 if [[ ! -f "documentation/software-intern-development.pdf" ]]
 then
