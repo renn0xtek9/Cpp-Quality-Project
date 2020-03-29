@@ -1,21 +1,22 @@
 #!/bin/bash
+versionfile="build/debug-x86_64/version.hpp"
 function CheckThatVersionHPPExistAndIsGood()
 {
-    if [[ ! -f "version.hpp" ]]
+    if [[ ! -f "$versionfile" ]]
     then
-        echo "Could not find version.hpp"
+        echo "Could not find $versionfile"
         exit 1
     fi
-    version=$(cat "version.hpp" |grep "#define VERSION" | sed 's/#define VERSION//g' |sed 's/[[:space:]]//g')
+    version=$(cat $versionfile |grep "#define VERSION" | sed 's/#define VERSION//g' |sed 's/[[:space:]]//g')
     if [ -z "$version" ] 
     then
-        echo "Version number is empty in version.hpp"
+        echo "Version number is empty in $versionfile"
         exit 2 
     fi
     SHORT_HASH=$(git rev-parse --short HEAD)
     if [ "$version" != "$SHORT_HASH" ] 
     then 
-        echo "VERSION in version.hpp: $version while SHORT_HASH: $SHORT_HASH"
+        echo "VERSION in $versionfile: $version while SHORT_HASH: $SHORT_HASH"
         exit 3
     fi
 }
