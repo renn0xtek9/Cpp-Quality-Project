@@ -7,6 +7,6 @@ sudo make install
 
 sudo apt install clang-format clang-tidy
 
-pip3 install -user cmake-format
+pip3 install --user cmake-format
 
 
