@@ -7,12 +7,13 @@ import codecs
 import argparse
 
 class FormatRuleCreator:
-    def __init__(self, builddirectory, repository, cpp_format_tool=None, c_header_as_cpp=True, python_format_tool=None, qml_format_tool=None):
+    def __init__(self, builddirectory, repository, cpp_format_tool=None, c_header_as_cpp=True, python_format_tool=None, qml_format_tool=None, excludepattern=None):
         self.repository = repository
         self.cpp_format_tool = cpp_format_tool
         self.python_format_tool = python_format_tool
         self.qml_format_tool = qml_format_tool
         self.builddirectory = builddirectory
+        self.excludepattern= excludepattern
         if not os.path.isabs(builddirectory):
             self.builddirectory = os.path.normpath(os.sep.join([self.repository, builddirectory]))
         self.relevant_extansions = list()
@@ -33,6 +34,11 @@ class FormatRuleCreator:
             for extension in self.relevant_extansions:
                 if filepath.split('.')[-1] == extension and not str(self.builddirectory+os.sep) in filepath:
                     relevant_source_files.append(os.sep.join([self.repository, filepath]))
+        if self.excludepattern is not None:
+            for exclude_pattern in self.excludepattern.split(';'):
+                for relevant_file in relevant_source_files: 
+                    if exclude_pattern in relevant_file:
+                        relevant_source_files.remove(relevant_file)
         return relevant_source_files
 
     def __GetFullPathToSourceFileInsideTheBuildDirectory(self, sourcefile):
@@ -164,6 +170,7 @@ def main(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("-b", "--build-directory", help="build directory", required=True)
     ap.add_argument("-r", "--repository", help="repository", required=True)
+    ap.add_argument("-x", "--exclude-pattern", help="exclude pattern", required=False)
     ap.add_argument("--cpp-format-tool", help="cpp file form", required=False)
     ap.add_argument("--c-header-as-cpp", help="c header ('*.h') are treated as cpp headers", required=False)
     ap.add_argument("--python-format-tool", help="python file formatting command", required=False)
@@ -172,7 +179,7 @@ def main(argv):
 
     creator = FormatRuleCreator(args['build_directory'], args['repository'], cpp_format_tool=args['cpp_format_tool'],
                                 c_header_as_cpp=args['c_header_as_cpp'], python_format_tool=args['python_format_tool'],
-                                qml_format_tool=args['qml_format_tool'])
+                                qml_format_tool=args['qml_format_tool'],excludepattern=args['exclude_pattern'])
     creator.WriteMakeFileOfFormattingRule()
 
 

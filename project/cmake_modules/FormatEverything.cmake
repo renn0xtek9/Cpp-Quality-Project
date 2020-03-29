@@ -36,7 +36,8 @@ ADD_CUSTOM_COMMAND (
     python3
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/scripts/generate_format_rules.py
     --build-directory ${CMAKE_BINARY_DIR} --repository ${CMAKE_SOURCE_DIR}
-    --cpp-format-tool "/usr/bin/clang-format -i"
+    --cpp-format-tool "/usr/bin/clang-format -i" --exclude-pattern
+    "third-party"
     >${PROJECT_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log
 )
 

@@ -65,10 +65,10 @@ class Testclassname(unittest.TestCase):
         test_repository = os.sep.join(
             [self.current_file_directory, "generate_format_rules_tests", "resources", "repository1"])
         test_builddirectory = os.sep.join([test_repository, "build"])
-        self.m_unit = FormatRuleCreator(test_builddirectory, test_repository,cpp_format_tool="/usr/bin/clang -i")
-        self.assertEqual([os.sep.join([test_repository, "foo.cpp"]),
-                          os.sep.join([test_repository, "src", "foobar.cpp"]),
-                          os.sep.join([test_repository, "bar.cpp"])], self.m_unit._FormatRuleCreator__GetListOfAbsolutePathOfRelevantFiles())
+        self.m_unit = FormatRuleCreator(test_builddirectory, test_repository,cpp_format_tool="/usr/bin/clang -i",excludepattern="third-party")
+        self.assertEqual([os.sep.join([test_repository, "bar.cpp"]),
+                          os.sep.join([test_repository, "foo.cpp"]),                          
+                          os.sep.join([test_repository, "src", "foobar.cpp"])], self.m_unit._FormatRuleCreator__GetListOfAbsolutePathOfRelevantFiles())
         
     def test_RelevantExtansionFilesSetAutomaticaly(self):
         unit=FormatRuleCreator("build", "/home/foo/bar/",cpp_format_tool="/usr/bin/clang-format -i")
