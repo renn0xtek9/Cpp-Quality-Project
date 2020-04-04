@@ -3,13 +3,39 @@ from generate_format_rules import FormatRuleCreator
 import unittest
 import os
 
-class Testclassname(unittest.TestCase):
+
+
+class FormatRuleCreator_FileIntegrity(unittest.TestCase):
     def setUp(self):
         self.maxDiff=None
         self.m_unit = FormatRuleCreator("build", "/home/foo/bar/",cpp_format_tool="/usr/bin/clang-format -i")
         self.current_file_directory = os.path.dirname(os.path.abspath(__file__))
         pass
-
+    
+    def test_GetFormatStampLine(self):
+        sourcefile="/home/foo/bar/lib/src/file.cpp"
+        expected_content="format: lib/src/file.cpp.stamp"
+        self.assertEqual(expected_content,self.m_unit._FormatRuleCreator__GetFormatStampLine(sourcefile))
+        
+    def test_GetFormatStampBlock(self):
+        sourcefiles=["/home/foo/bar/lib/src/file.cpp","/home/foo/bar/main.cpp"]
+        expected=["format: CMakeFiles/format",
+        "format: lib/src/file.cpp.stamp",
+        "format: main.cpp.stamp",
+        "format: CMakeFiles/format.dir/build.make"]
+        self.assertEqual(expected,self.m_unit._FormatRuleCreator__GetFormatStampBlock(sourcefiles))
+        
+    def test_GetArrayOfLinesForStampRecipe(self):
+        expected_content=['main.cpp.stamp: ../main.cpp',
+        '	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/foo/bar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Formatting main.cpp and stamping it with /home/foo/bar/build/main.cpp.stamp"',
+        '	/usr/bin/cmake -E make_directory /home/foo/bar/build',
+        '	/usr/bin/clang-format -i /home/foo/bar/main.cpp',
+        '	/usr/bin/cmake -E touch /home/foo/bar/build/main.cpp.stamp']
+        content=self.m_unit._FormatRuleCreator__GetArrayOfLinesForStampRecipe("/home/foo/bar/main.cpp",1)
+        self.assertEqual(len(expected_content),len(content))
+        for i in range(0,len(expected_content)):
+            self.assertEqual(expected_content[i],content[i])
+    
     def test_GetFirstLineOfStampRecipe(self):
         self.assertEqual("main.cpp.stamp: ../main.cpp",
                          self.m_unit._FormatRuleCreator__GetFirstLineOfStampRecipe("/home/foo/bar/main.cpp"))
@@ -52,7 +78,16 @@ class Testclassname(unittest.TestCase):
         sourcefile="/home/foo/bar/lib/src/main.cpp"
         expected_line="\t/usr/bin/cmake -E touch /home/foo/bar/build/lib/src/main.cpp.stamp"
         self.assertEqual(expected_line,self.m_unit._FormatRuleCreator__GetFifthLineOfStampRecipe(sourcefile))
+    
 
+
+class FormatRuleCreator_HelperFunctions(unittest.TestCase):
+    def setUp(self):
+        self.maxDiff=None
+        self.m_unit = FormatRuleCreator("build", "/home/foo/bar/",cpp_format_tool="/usr/bin/clang-format -i",excludepattern="third-party")
+        self.current_file_directory = os.path.dirname(os.path.abspath(__file__))
+        pass
+    
     def test_GetCMakeFilesFormatContent(self):
         self.assertEqual(["CMakeFiles/format: foobar.cpp.stamp"],
                          self.m_unit._FormatRuleCreator__GetCMakeFilesFormatContent(["/home/foo/bar/foobar.cpp"]))
@@ -74,29 +109,9 @@ class Testclassname(unittest.TestCase):
         unit=FormatRuleCreator("build", "/home/foo/bar/",cpp_format_tool="/usr/bin/clang-format -i")
         self.assertEqual(["hxx","cxx","cpp","hpp","h"],unit.relevant_extansions)
         
-    def test_GetArrayOfLinesForStampRecipe(self):
-        expected_content=['main.cpp.stamp: ../main.cpp',
-        '	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/foo/bar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Formatting main.cpp and stamping it with /home/foo/bar/build/main.cpp.stamp"',
-        '	/usr/bin/cmake -E make_directory /home/foo/bar/build',
-        '	/usr/bin/clang-format -i /home/foo/bar/main.cpp',
-        '	/usr/bin/cmake -E touch /home/foo/bar/build/main.cpp.stamp']
-        content=self.m_unit._FormatRuleCreator__GetArrayOfLinesForStampRecipe("/home/foo/bar/main.cpp",1)
-        self.assertEqual(len(expected_content),len(content))
-        for i in range(0,len(expected_content)):
-            self.assertEqual(expected_content[i],content[i])
+  
             
-    def test_GetFormatStampLine(self):
-        sourcefile="/home/foo/bar/lib/src/file.cpp"
-        expected_content="format: lib/src/file.cpp.stamp"
-        self.assertEqual(expected_content,self.m_unit._FormatRuleCreator__GetFormatStampLine(sourcefile))
-        
-    def test_GetFormatStampBlock(self):
-        sourcefiles=["/home/foo/bar/lib/src/file.cpp","/home/foo/bar/main.cpp"]
-        expected=["format: CMakeFiles/format",
-        "format: lib/src/file.cpp.stamp",
-        "format: main.cpp.stamp",
-        "format: CMakeFiles/format.dir/build.make"]
-        self.assertEqual(expected,self.m_unit._FormatRuleCreator__GetFormatStampBlock(sourcefiles))
+    
 
     def test_GetMakeRuleFilePath(self):
         self.assertEqual("/home/foo/bar/build/CMakeFiles/format.dir/build.make",self.m_unit._FormatRuleCreator__GetMakeRuleFilePath())
