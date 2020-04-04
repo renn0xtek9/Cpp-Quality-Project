@@ -29,11 +29,14 @@ class FormatRuleCreator:
     def __GetListOfAbsolutePathOfRelevantFiles(self):
         relevant_source_files = list()
         os.chdir(self.repository)
-        files = glob.glob("**", recursive=True)
-        for filepath in files:
+        all_folders_and_files_in_repository = glob.glob("**", recursive=True) #BUG it lists files and folder !!
+        for anypath in all_folders_and_files_in_repository:
+            if (not os.path.isfile(anypath)):
+                continue 
+            absolute_file_path=os.path.join(self.repository,anypath)
             for extension in self.relevant_extansions:
-                if filepath.split('.')[-1] == extension and not str(self.builddirectory+os.sep) in filepath:
-                    relevant_source_files.append(os.sep.join([self.repository, filepath]))
+                if absolute_file_path.split('.')[-1] == extension and not str(self.builddirectory+os.sep) in absolute_file_path:
+                    relevant_source_files.append(absolute_file_path)
         if self.excludepattern is not None:
             for exclude_pattern in self.excludepattern.split(';'):
                 for relevant_file in relevant_source_files: 
