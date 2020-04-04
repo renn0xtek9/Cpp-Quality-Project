@@ -5,6 +5,7 @@ TMP=$(mktemp -d)
 cp -r project $TMP
 cd $TMP 
 cd project
+rm -rf cmake_modules/scripts/generate_format_rules_tests/ # TODO remove this when generate_format_rules_tests is finally a package
 mkdir -p build 
 cd build 
 cmake -DCMAKE_BUILD_TYPE=Debug ..  > cmake.log
