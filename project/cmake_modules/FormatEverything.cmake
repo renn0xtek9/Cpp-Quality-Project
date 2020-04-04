@@ -28,10 +28,6 @@ ADD_CUSTOM_TARGET (
 SET (_exclude_pattern "third-party")
 IF (TOP_BUILD)
   SET (_exclude_pattern "${_exclude_pattern};${CMAKE_SOURCE_DIR}/${TOP_BUILD}")
-  MESSAGE (
-    STATUS
-      "here: TOP_BUILD------------------------------------------------\n ${TOP_BUILD} "
-  )
 ENDIF ()
 
 # Mention has output but don't really produce it on purpose !
