@@ -10,7 +10,7 @@ cd build
 cmake -DCMAKE_BUILD_TYPE=Debug ..  > cmake.log
 make > make.log
 
-number_of_files_under_build=$(cat make.log  |grep Formatting |grep project/build |wc -l)
+number_of_files_under_build=$(cat make.log |grep Formatting |sed 's/\[ [0-9][0-9]%\] Formatting \(.*\) and stam.*/\1/g' |grep -v Formatting: |grep build |wc -l)
 if [[ $number_of_files_under_build == "0" ]]
 then 
     exit 0
