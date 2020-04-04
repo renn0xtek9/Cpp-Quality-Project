@@ -59,7 +59,7 @@ class FormatRuleCreator:
         return "{}.stamp: {}".format(os.path.relpath(sourcefile, self.repository), os.path.relpath(sourcefile, self.builddirectory))
 
     def __GetSecondLineOfStampRecipe(self, sourcefile, sourcefilenumber):
-        return str("	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir={} --progress-num=$(CMAKE_PROGRESS_{}) \"Formatting {} and stamping it with {}\"".format(os.sep.join([self.builddirectory, "CMakeFiles"]), sourcefilenumber, os.path.basename(sourcefile), self.__GetStampFileAbsolutePath(sourcefile)))
+        return str("	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir={} --progress-num=$(CMAKE_PROGRESS_{}) \"Formatting {} and stamping it with {}\"".format(os.sep.join([self.builddirectory, "CMakeFiles"]), sourcefilenumber, os.path.relpath(sourcefile,self.repository), self.__GetStampFileAbsolutePath(sourcefile)))
 
     def __GetThirdLineOfStampRecipe(self, sourcefile):
         """When call with /home/max/Projects/testcpp/foo/src/main.cpp, this will return something like 

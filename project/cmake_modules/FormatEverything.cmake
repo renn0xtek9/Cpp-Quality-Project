@@ -25,6 +25,15 @@ ADD_CUSTOM_TARGET (
     ${CMAKE_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log.stamp
 )
 
+SET (_exclude_pattern "third-party")
+IF (TOP_BUILD)
+  SET (_exclude_pattern "${_exclude_pattern};${CMAKE_SOURCE_DIR}/${TOP_BUILD}")
+  MESSAGE (
+    STATUS
+      "here: TOP_BUILD------------------------------------------------\n ${TOP_BUILD} "
+  )
+ENDIF ()
+
 # Mention has output but don't really produce it on purpose !
 ADD_CUSTOM_COMMAND (
   OUTPUT
@@ -37,7 +46,7 @@ ADD_CUSTOM_COMMAND (
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/scripts/generate_format_rules.py
     --build-directory ${CMAKE_BINARY_DIR} --repository ${CMAKE_SOURCE_DIR}
     --cpp-format-tool "/usr/bin/clang-format -i" --exclude-pattern
-    "third-party"
+    \"${_exclude_pattern}\"
     >${PROJECT_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log
 )
 

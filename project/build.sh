@@ -18,7 +18,7 @@ Builds=("debug-x86_64" "debug-raspberry")
 mkdir -p build && cd build 
 for build in ${Builds[@]}
 do 
-    cmakecommand="cmake "
+    cmakecommand="cmake -DTOP_BUILD=build"
     if [[ $build == *"debug"* ]]; then   #eg if [[ $str == *"in"* ]]
         cmakecommand=$(echo $cmakecommand "-DCMAKE_BUILD_TYPE=Debug")
     fi

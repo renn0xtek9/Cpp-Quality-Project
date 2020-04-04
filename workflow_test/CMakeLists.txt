@@ -26,3 +26,24 @@ add_test(
   NAME workflow_documentation_compiles_locally
   COMMAND /bin/bash ${CMAKE_CURRENT_SOURCE_DIR}/documentation_compile_locally.sh
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_test(
+  NAME workflow_no_formatting_of_cmake_file_inside_build_directory_when_using_build_script
+  COMMAND /bin/bash ${CMAKE_CURRENT_SOURCE_DIR}/no_formatting_of_cmake_file_inside_build_directory_when_using_build_script.sh
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})  
+
+add_test(
+  NAME workflow_no_formatting_of_cmake_file_inside_build_directory_when_using_cmake_directly
+  COMMAND /bin/bash ${CMAKE_CURRENT_SOURCE_DIR}/no_formatting_of_cmake_file_inside_build_directory_when_using_cmake_directly.sh
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}) 
+  
+add_test(
+  NAME workflow_no_formatting_of_source_file_inside_build_directory_when_using_build_script
+  COMMAND /bin/bash ${CMAKE_CURRENT_SOURCE_DIR}/no_formatting_of_source_file_inside_build_directory_when_using_build_script.sh
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})  
+
+add_test(
+  NAME workflow_no_formatting_of_source_file_inside_build_directory_when_using_cmake_directly
+  COMMAND /bin/bash ${CMAKE_CURRENT_SOURCE_DIR}/no_formatting_of_source_file_inside_build_directory_when_using_cmake_directly.sh
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}) 
+
