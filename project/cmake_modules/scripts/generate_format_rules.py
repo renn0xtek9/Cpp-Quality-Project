@@ -131,8 +131,8 @@ class FormatRuleCreator:
 
     def __DumpFileIntoOutputFile(self, inputfile, outputfile, replacementdict=None, append_or_write="a"):
         content = [line.rstrip('\n') for line in open(inputfile)]
-        print("For input file"+inputfile + "  " + append_or_write + "----------" + outputfile)
-        print("Dumping "+'\n'.join(content))
+        #print("For input file"+inputfile + "  " + append_or_write + "----------" + outputfile)
+        #print("Dumping "+'\n'.join(content))
         self.__DumpArrayOfLinesIntoOutputFile(content, outputfile, None, append_or_write)
 
     def __GetMakeRuleFilePath(self):
