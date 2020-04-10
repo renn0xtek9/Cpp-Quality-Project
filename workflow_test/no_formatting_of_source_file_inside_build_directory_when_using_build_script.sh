@@ -5,6 +5,7 @@ TMP=$(mktemp -d)
 cp -r project $TMP
 cd $TMP 
 cd project
+rm -rf cmake_modules/scripts/generate_format_rules_tests/
 ./build.sh > build.log
 cd build/debug-x86_64
 make > make.log
