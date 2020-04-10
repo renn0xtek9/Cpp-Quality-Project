@@ -2,14 +2,20 @@
 from generate_format_rules import FormatRuleCreator
 import unittest
 import os
+import sys
+
+g_current_file_directory=os.path.dirname(os.path.abspath(__file__))
+g_directory_from_where_the_script_was_called=os.getcwd()
 
 
 
 class FormatRuleCreator_FileIntegrity(unittest.TestCase):
     def setUp(self):
+        global g_directory_from_where_the_script_was_called, g_current_file_directory
         self.maxDiff=None
         self.m_unit = FormatRuleCreator("build", "/home/foo/bar/",cpp_format_tool="/usr/bin/clang-format -i")
-        self.current_file_directory = os.path.dirname(os.path.abspath(__file__))
+        self.current_file_directory = g_current_file_directory
+        os.chdir(g_directory_from_where_the_script_was_called)
         pass
     
     def test_GetFormatStampLine(self):
@@ -83,9 +89,11 @@ class FormatRuleCreator_FileIntegrity(unittest.TestCase):
 
 class FormatRuleCreator_HelperFunctions(unittest.TestCase):
     def setUp(self):
+        global g_directory_from_where_the_script_was_called, g_current_file_directory
         self.maxDiff=None
         self.m_unit = FormatRuleCreator("build", "/home/foo/bar/",cpp_format_tool="/usr/bin/clang-format -i",excludepattern="third-party")
-        self.current_file_directory = os.path.dirname(os.path.abspath(__file__))
+        self.current_file_directory = g_current_file_directory
+        os.chdir(g_directory_from_where_the_script_was_called)
         pass
     
     def test_GetCMakeFilesFormatContent(self):
@@ -96,7 +104,7 @@ class FormatRuleCreator_HelperFunctions(unittest.TestCase):
         self.assertEqual(["CMakeFiles/format: foo/bar.cpp.stamp"],
                          self.m_unit._FormatRuleCreator__GetCMakeFilesFormatContent(["/home/foo/bar/foo/bar.cpp"]))
 
-    def test_GetListOfAbsolutePathOfRelevantFiles(self):
+    def test_GetListOfAbsolutePathOfRelevantFiles(self):        
         test_repository = os.sep.join(
             [self.current_file_directory, "generate_format_rules_tests", "resources", "repository1"])
         test_builddirectory = os.sep.join([test_repository, "build"])
@@ -105,13 +113,29 @@ class FormatRuleCreator_HelperFunctions(unittest.TestCase):
                           os.sep.join([test_repository, "foo.cpp"]),                          
                           os.sep.join([test_repository, "src", "foobar.cpp"])], self.m_unit._FormatRuleCreator__GetListOfAbsolutePathOfRelevantFiles())
         
+    def test_GetListOfAbsolutePathOfRelevantFiles_ExcludesFilesThatAreInBuildOfOtherPlatform(self):
+        test_repository = os.sep.join(
+            [self.current_file_directory, "generate_format_rules_tests", "resources", "repository1"])
+        test_builddirectory = os.sep.join([test_repository, "build/debug-someplatform"])
+        self.m_unit = FormatRuleCreator(test_builddirectory, test_repository,cpp_format_tool="/usr/bin/clang -i",excludepattern="third-party;build")
+        self.assertEqual([os.sep.join([test_repository, "bar.cpp"]),
+                          os.sep.join([test_repository, "foo.cpp"]),                          
+                          os.sep.join([test_repository, "src", "foobar.cpp"])], self.m_unit._FormatRuleCreator__GetListOfAbsolutePathOfRelevantFiles())
+        
+    def test_GetListOfAbsolutePathOfRelevantFiles_ExcludesFilesThatAreInBuildOfOtherPlatform_WhenScriptNotCalledInRepositoryDirectory(self):
+        test_repository = os.sep.join(
+            [self.current_file_directory, "generate_format_rules_tests", "resources", "repository1"])
+        test_builddirectory = os.sep.join([test_repository, "build/debug-someplatform"])
+        os.chdir(test_builddirectory)
+        self.m_unit = FormatRuleCreator(test_builddirectory, test_repository,cpp_format_tool="/usr/bin/clang -i",excludepattern="third-party;build")
+        self.assertEqual([os.sep.join([test_repository, "bar.cpp"]),
+                          os.sep.join([test_repository, "foo.cpp"]),                          
+                          os.sep.join([test_repository, "src", "foobar.cpp"])], self.m_unit._FormatRuleCreator__GetListOfAbsolutePathOfRelevantFiles())
+        
     def test_RelevantExtansionFilesSetAutomaticaly(self):
         unit=FormatRuleCreator("build", "/home/foo/bar/",cpp_format_tool="/usr/bin/clang-format -i")
         self.assertEqual(["hxx","cxx","cpp","hpp","h"],unit.relevant_extansions)
         
-  
-            
-    
 
     def test_GetMakeRuleFilePath(self):
         self.assertEqual("/home/foo/bar/build/CMakeFiles/format.dir/build.make",self.m_unit._FormatRuleCreator__GetMakeRuleFilePath())

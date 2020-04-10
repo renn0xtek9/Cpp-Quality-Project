@@ -29,7 +29,7 @@ class FormatRuleCreator:
     def __GetListOfAbsolutePathOfRelevantFiles(self):
         relevant_source_files = list()
         os.chdir(self.repository)
-        all_folders_and_files_in_repository = glob.glob("**", recursive=True) #BUG it lists files and folder !!
+        all_folders_and_files_in_repository = glob.glob("**", recursive=True)
         for anypath in all_folders_and_files_in_repository:
             if (not os.path.isfile(anypath)):
                 continue 
@@ -39,9 +39,7 @@ class FormatRuleCreator:
                     relevant_source_files.append(absolute_file_path)
         if self.excludepattern is not None:
             for exclude_pattern in self.excludepattern.split(';'):
-                for relevant_file in relevant_source_files: 
-                    if exclude_pattern in relevant_file:
-                        relevant_source_files.remove(relevant_file)
+                relevant_source_files=[f for f in relevant_source_files if exclude_pattern not in f]
         return relevant_source_files
 
     def __GetFullPathToSourceFileInsideTheBuildDirectory(self, sourcefile):

@@ -44,6 +44,6 @@ ADD_CUSTOM_COMMAND (
     --cpp-format-tool "/usr/bin/clang-format -i" --exclude-pattern
     \"${_exclude_pattern}\"
     >${PROJECT_BINARY_DIR}/CMakeFiles/create-format-rule.dir/create-format-rule-creation.log
-)
+  COMMENT "python3 ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/scripts/generate_format_rules.py --build-directory ${CMAKE_BINARY_DIR} --repository ${CMAKE_SOURCE_DIR} --cpp-format-tool \"/usr/bin/clang-format -i\" --exclude-pattern \"${_exclude_pattern}\" ")
 
 ADD_CUSTOM_TARGET (format ALL DEPENDS create-format-rule)

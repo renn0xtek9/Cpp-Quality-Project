@@ -6,6 +6,7 @@ cp -r project $TMP
 cd $TMP 
 cd project
 rm -rf cmake_modules/scripts/generate_format_rules_tests/
+rm -rf build/*
 ./build.sh > build.log
 cd build/debug-x86_64
 make > make.log
@@ -15,6 +16,7 @@ if [[ $number_of_files_under_build == "0" ]]
 then 
     exit 0
 else 
-    echo "FAILED there was $number_of_files_under_build files formatted in the build directory"
+    echo "FAILED there was $number_of_files_under_build files formatted in the build directory:"
+    cat make.log |grep Formatting |sed 's/\[ [0-9][0-9]%\] Formatting \(.*\) and stam.*/\1/g' |grep -v Formatting: |grep build
     exit 1
 fi
