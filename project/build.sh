@@ -7,7 +7,7 @@
 # exit 0
 
 #!/bin/bash
-function FindToolchain ()
+function FindToolchain
 {
     script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
     cd $script_dir
@@ -25,7 +25,7 @@ do
     architecture=$(echo $build |sed 's/.*-\(.*\)/\1/g') 
     if [[ "$architecture" != "$(uname -m)" ]] 
     then
-        $toolchain=$(FindToolchain "toolchain-$architecture.cmake")
+        toolchain=$(FindToolchain "toolchain-$architecture.cmake")
         cmakecommand=$(echo $cmakecommand "-DCMAKE_TOOLCHAIN_FILE=$toolchain")   
     fi 
     cmakecommand=$(echo $cmakecommand ./../../)
