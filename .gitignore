@@ -1,4 +1,4 @@
-*.pyc
-*.kdev4
-./kdev4/*
 build/*
+.kdev4/*
+*.kdev4
+third-party/*
