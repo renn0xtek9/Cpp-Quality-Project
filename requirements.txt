@@ -1,3 +1,2 @@
 conan==1.59
-cmake-format==0.6.13
 pre-commit==3.2.2
