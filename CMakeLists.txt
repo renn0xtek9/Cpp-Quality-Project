@@ -8,8 +8,9 @@ SET (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 LIST (APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/)
 
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/conan.cmake)
+#include(${CMAKE_SOURCE_DIR}/cmake_modules/conanbuildinfo.cmake)
 conan_basic_setup(PROFILE ${CMAKE_SOURCE_DIR}/conan_profiles/linux-x86)
 
 # conan_basic_setup(TARGETS)

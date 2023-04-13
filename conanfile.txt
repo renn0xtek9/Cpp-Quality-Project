@@ -1,9 +1,7 @@
 [requires]
 gtest/1.10.0
 
-[options]
-build_tests=False
 
 [generators]
-CMakeToolchain
+cmake
 
