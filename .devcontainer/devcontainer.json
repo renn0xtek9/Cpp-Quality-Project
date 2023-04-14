@@ -4,13 +4,14 @@
   "settings": {
     "terminal.integrated.shell.linux": "/bin/bash"
   },
-  "extensions": [
-    "ms-vscode.cpptools",
-    "ms-vscode.cpptools-extension-pack",
-    "ms-vscode.cpptools-themes",
-    "hbenl.vscode-test-explorer",
-    "MalcolmMielle.semantic-highlighting"
-  ],
+  "customizations": {
+    "vscode": {["ms-vscode.cpptools",
+                "ms-vscode.cpptools-extension-pack",
+                "ms-vscode.cpptools-themes",
+                "hbenl.vscode-test-explorer",
+                "MalcolmMielle.semantic-highlighting"]}
+  },
+  "extensions":,
   "postCreateCommand": "sudo chown vscode:vscode /workspace && pre-commit install",
   "appPort": [],
   "runArgs": [],
