@@ -1,8 +1,8 @@
 #!/bin/bash 
 set -euxo pipefail
-
+DEBIAN_FRONTEND=noninteractive
 sudo apt-get update
-sudo apt-get install -y curl nano cmake gcc python3 python3-pip git
+sudo apt-get install -y curl nano cmake gcc python3 python3-pip git texlive-full biber
 
 python3 -m pip install -r requirements.txt
 
