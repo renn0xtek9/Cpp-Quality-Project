@@ -1,15 +1,19 @@
 {
   "name": "Ubuntu 22.04 Dev Container",
   "dockerFile": "Dockerfile",
-  "settings": {
-    "terminal.integrated.shell.linux": "/bin/bash"
-  },
   "customizations": {
-    "vscode": {["ms-vscode.cpptools",
-                "ms-vscode.cpptools-extension-pack",
-                "ms-vscode.cpptools-themes",
-                "hbenl.vscode-test-explorer",
-                "MalcolmMielle.semantic-highlighting"]}
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cmake-tools",
+        "github.vscode-pull-request-github",
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.cpptools-themes",
+        "hbenl.vscode-test-explorer",
+        "MalcolmMielle.semantic-highlighting",
+        "derivitec-ltd.cmake-test-adapter"
+      ]
+    }
   },
   "extensions":,
   "postCreateCommand": "sudo chown vscode:vscode /workspace && pre-commit install",
