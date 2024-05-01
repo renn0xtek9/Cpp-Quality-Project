@@ -1,9 +1,14 @@
-cmake_minimum_required(VERSION 3.0)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.0)
+ENABLE_TESTING ()
 
-list(APPEND CMAKE_MODULE_PATH
-     ${CMAKE_CURRENT_SOURCE_DIR}/project/cmake_modules/)
-include(CMakeListsFormatting)
+LIST (APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/)
 
-enable_testing()
-add_subdirectory(project)
-add_subdirectory(workflow_test)
+INCLUDE (${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+CONAN_BASIC_SETUP (PROFILE ${CMAKE_SOURCE_DIR}/conan_profiles/linux-x86)
+
+INCLUDE (GenerateGitHashAtConfigTime)
+INCLUDE (GenerateGitHashAtBuildTime)
+
+ADD_SUBDIRECTORY (project)
+ADD_SUBDIRECTORY (test)
+ADD_SUBDIRECTORY (documentation)
