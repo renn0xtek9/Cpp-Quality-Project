@@ -20,4 +20,4 @@ jobs:
             -v ${{ github.workspace }}:/workspace
             --name ci-container
           image: ci-image:latest
-          run: /workspace/build.sh && /workspace/test.sh
+          run: /workspace/scripts/configure.sh && /workspace/scripts/build.sh
