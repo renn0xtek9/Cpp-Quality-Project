@@ -1,5 +1,5 @@
 #!/bin/bash 
+set -euxo pipefail
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-set -e
-cd "$DIR"/build
-ctest --output-on-failure
+cd "$DIR"/../build || exit 1
+make 

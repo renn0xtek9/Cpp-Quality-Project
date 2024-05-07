@@ -1,0 +1,16 @@
+name: Native Ubuntu 22.04 pipeline
+
+on: [push,pull_request]
+
+jobs:
+  ubuntu_22_native_test_pipeline:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install development dependencies
+        run: ./.devcontainer/setup_environment_on_ubuntu_22.sh
+      - name: Configure 
+        run: ./scripts/format.sh
+      - name: Make documentation
+        run: cd build && make documentation
+      
