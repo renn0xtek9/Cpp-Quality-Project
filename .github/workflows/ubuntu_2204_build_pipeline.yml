@@ -1,0 +1,19 @@
+name: Native Ubuntu 22.04 pipeline
+
+on: [push]
+
+jobs:
+  build_pipeline:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install development dependencies
+        run: ./.devcontainer/setup_environment_on_ubuntu_22.sh
+      - name: Check formating
+        run: ./scripts/format.sh
+      - name: Configure 
+        run: ./scripts/configure.sh
+      - name: Build
+        run: ./scripts/build.sh
+      - name: Tests
+        run: ./scripts/test.sh --stop-on-failure
