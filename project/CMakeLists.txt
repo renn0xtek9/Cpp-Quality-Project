@@ -36,3 +36,9 @@ ADD_TEST (
   COMMAND gcovr -r .. --fail-under-line 1.0 --html --html-details -o index.html
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 SET_TESTS_PROPERTIES (code_coverage PROPERTIES FIXTURES_CLEANUP unit_tests)
+
+ADD_TEST (
+  NAME benchmarking
+  COMMAND $<TARGET_FILE:probe_benchmark>
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+SET_TESTS_PROPERTIES (benchmarking PROPERTIES DEPENDS benchmark)
