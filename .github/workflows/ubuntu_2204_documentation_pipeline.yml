@@ -10,7 +10,7 @@ jobs:
       - name: Install development dependencies
         run: ./.devcontainer/setup_environment_on_ubuntu_22.sh
       - name: Configure 
-        run: ./scripts/format.sh
+        run: ./scripts/configure.sh
       - name: Make documentation
         run: cd build && make documentation
       
