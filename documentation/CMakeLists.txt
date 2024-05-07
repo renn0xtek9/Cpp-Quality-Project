@@ -10,4 +10,7 @@ CREATELATEXDOCUMENTAION (
   "${_software_intern_name}" "${SOFTWARE_INTERN_MAIN_TEX}"
   "${SOFTWARE_INTERN_RESOURCES_FILES}" "${SOFTWARE_INTERN_BIBLIOGRAPHY}")
 
-ADD_CUSTOM_TARGET (documentation DEPENDS ${_software_intern_name})
+ADD_CUSTOM_TARGET (
+  documentation
+  DEPENDS ${_software_intern_name}
+  COMMENT "Building documentation")
