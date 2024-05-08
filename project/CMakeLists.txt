@@ -24,8 +24,21 @@ ADD_CUSTOM_TARGET (
   COMMAND g++ -S
   COMMENT "Convert ${EXENAME} to assembly"
   ${CMAKE_SOURCE_DIR}/main.cpp)
+
 ADD_CUSTOM_TARGET (
   benchmark
   COMMENT "Benchmark target"
   COMMAND $<TARGET_FILE:probe_benchmark> >
           ${CMAKE_SOURCE_DIR}/benchmark_report.txt)
+
+ADD_TEST (
+  NAME code_coverage
+  COMMAND gcovr -r .. --fail-under-line 1.0 --html --html-details -o index.html
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+SET_TESTS_PROPERTIES (code_coverage PROPERTIES FIXTURES_CLEANUP unit_tests)
+
+ADD_TEST (
+  NAME benchmarking
+  COMMAND $<TARGET_FILE:probe_benchmark>
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+SET_TESTS_PROPERTIES (benchmarking PROPERTIES DEPENDS benchmark)
