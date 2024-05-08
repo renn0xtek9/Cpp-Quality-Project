@@ -1,0 +1,40 @@
+# Doxyfile
+
+# Set the project name
+PROJECT_NAME = ProjectName
+
+PROJECT_LOGO = @CMAKE_SOURCE_DIRECTORY@/documentation/resources/project_or_company_logo.png
+
+# Set the project version
+<!-- PROJECT_VERSION = 1.0 -->
+
+# Set the output directory for the generated documentation
+OUTPUT_DIRECTORY = @CMAKE_CURRENT_BINARY_DIR@/code_documentation/
+CREATE_SUBDIRS = YES
+
+# Set the input directories for the source code
+INPUT = @CMAKE_SOURCE_DIR@/project
+RECURSIVE = YES
+
+# Set the file patterns to include in the documentation
+FILE_PATTERNS = *.cpp *.h
+
+# Enable HTML output
+GENERATE_HTML = YES
+
+# Set the HTML output directory
+HTML_OUTPUT = html
+
+# Enable the generation of a compound index
+<!-- GENERATE_HTML_HELP = YES -->
+
+# Enable the generation of a search index
+<!-- GENERATE_SEARCHHELP = YES -->
+
+GENERATE_TESTLIST = YES
+GENERATE_BUGLIST = YES 
+GENERATE_DEPRECATEDLIST = YES
+
+
+
+GENERATE_LATEX = YES
