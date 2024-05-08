@@ -3,7 +3,7 @@ name: Native Ubuntu 22.04 pipeline
 on: [push]
 
 jobs:
-  ubuntu_22_native_test_pipeline:
+  documentation_pipeline:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v1
