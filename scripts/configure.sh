@@ -6,4 +6,4 @@ rm -rf build
 mkdir -p build
 cd build 
 conan install ../conanfile.txt --profile:build=../conan_profiles/linux-x86 --profile:host=../conan_profiles/linux-x86 --build missing
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON --graphviz=cmake.dot
