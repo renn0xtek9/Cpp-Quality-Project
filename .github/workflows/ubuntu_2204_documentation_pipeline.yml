@@ -12,5 +12,5 @@ jobs:
       - name: Configure 
         run: ./scripts/configure.sh
       - name: Make documentation
-        run: ./scripts/documentation.sh
+        run: ./scripts/document.sh
       
