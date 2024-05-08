@@ -1,3 +1,6 @@
+/*! \file probe_benchmark.cpp
+ * \brief Benchmark runtime of probe library
+ */
 #include <probe.h>
 
 #include <chrono>

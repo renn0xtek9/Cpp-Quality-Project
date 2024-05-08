@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install development dependencies
-        run: ./.devcontainer/setup_environment_on_ubuntu_22.sh
+        run: ./.devcontainer/setup_documentation_environment_on_ubuntu_22.sh
       - name: Configure 
         run: ./scripts/configure.sh
       - name: Make documentation
