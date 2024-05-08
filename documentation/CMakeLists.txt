@@ -16,14 +16,14 @@ CREATELATEXDOCUMENT (
 SET (DOCUMENTATION_OUTPUT_FOLDER "${CMAKE_CURRENT_BINARY_DIR}")
 SET (ENV{DOCUMENTATION_OUTPUT_FOLDER} ${DOCUMENTATION_OUTPUT_FOLDER})
 ADD_CUSTOM_COMMAND (
-  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/code-documentation/html/index.html
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/code-documentation.doxygen
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/code_documentation/html/index.html
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/code_documentation.doxygen
   VERBATIM
-  COMMAND doxygen ${CMAKE_CURRENT_SOURCE_DIR}/code-documentation.doxygen
+  COMMAND doxygen ${CMAKE_CURRENT_SOURCE_DIR}/code_documentation.doxygen
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   COMMENT "Building code documentation")
 ADD_CUSTOM_TARGET (
   code_documentation
-  SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/code-documentation.doxygen
+  SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/code_documentation.doxygen
   COMMENT "Target code documentation"
-  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/code-documentation/html/index.html)
+  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/code_documentation/html/index.html)

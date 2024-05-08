@@ -9,7 +9,7 @@ PROJECT_LOGO = documentation/resources/project_or_company_logo.png
 <!-- PROJECT_VERSION = 1.0 -->
 
 # Set the output directory for the generated documentation
-OUTPUT_DIRECTORY = $(DOCUMENTATION_OUTPUT_FOLDER)/code-documentation/
+OUTPUT_DIRECTORY = $(DOCUMENTATION_OUTPUT_FOLDER)/code_documentation/
 CREATE_SUBDIRS = YES
 
 # Set the input directories for the source code
