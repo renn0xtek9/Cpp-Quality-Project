@@ -1,6 +1,6 @@
 name: Continuous Integration
 run-name: ${{ github.actor }} submitting PR for ${{ github.head_ref }}
-on: [push, pull_request]
+on: [push]
 jobs:
   build-devcontainer:
     runs-on: ubuntu-22.04
