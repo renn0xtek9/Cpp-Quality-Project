@@ -1,7 +1,7 @@
 # Doxyfile
 
 # Set the project name
-PROJECT_NAME = My Project
+PROJECT_NAME = ProjectName
 
 PROJECT_LOGO = documentation/resources/project_or_company_logo.png
 
