@@ -20,7 +20,7 @@ ADD_CUSTOM_COMMAND (
   DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/code_documentation.doxygen
   VERBATIM
   COMMAND doxygen ${CMAKE_CURRENT_BINARY_DIR}/code_documentation.doxygen
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Building code documentation")
 ADD_CUSTOM_TARGET (
   code_documentation
