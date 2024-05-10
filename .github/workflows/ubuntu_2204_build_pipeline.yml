@@ -17,3 +17,5 @@ jobs:
         run: ./scripts/build.sh
       - name: Tests
         run: ./scripts/test.sh --stop-on-failure
+      - name: Tests 
+        run: ./scripts/packaging.sh
