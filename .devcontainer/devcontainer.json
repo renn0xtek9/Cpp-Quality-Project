@@ -9,6 +9,13 @@
       "--network=host"
     ]
   },
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.bash_aliases,target=/home/vscode/.bash_aliases,type=bind,consistency=cached",
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1.0.11": {}
+  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -30,7 +37,6 @@
   "postCreateCommand": "sudo chown vscode:vscode /workspace && pre-commit install",
   "appPort": [],
   "remoteUser": "vscode",
-  "mounts": [],
   "containerEnv": {},
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
   "workspaceFolder": "/workspace",
