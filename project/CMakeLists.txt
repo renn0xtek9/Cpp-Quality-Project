@@ -12,6 +12,8 @@ TARGET_LINK_LIBRARIES (${EXENAME} PUBLIC probe)
 
 INSTALL (TARGETS ${EXENAME} RUNTIME DESTINATION bin)
 
+INCLUDE (Packaging)
+
 ADD_CUSTOM_TARGET (
   disassemble
   COMMAND /usr/bin/objdump -S $<TARGET_FILE:testcpp> >
