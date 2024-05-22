@@ -11,5 +11,4 @@ INCLUDE (GenerateGitHashAtConfigTime)
 INCLUDE (GenerateGitHashAtBuildTime)
 
 ADD_SUBDIRECTORY (project)
-ADD_SUBDIRECTORY (test)
 ADD_SUBDIRECTORY (documentation)
